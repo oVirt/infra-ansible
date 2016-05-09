@@ -1,0 +1,6 @@
+---
+- src: https://github.com/OSAS/ansible-role-selinux
+  name: selinux
+- src: https://github.com/OSAS/ansible-role-openssh.git
+  name: openssh
+

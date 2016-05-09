@@ -1,0 +1,7 @@
+# fact caching to save time
+facts_cache
+# created by Ansible in case of failure
+playbooks/deploy.retry
+# handled via ansible-galaxy
+roles/selinux
+roles/openssh
