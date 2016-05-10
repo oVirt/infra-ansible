@@ -5,3 +5,23 @@
   - selinux
   - openssh
 
+- hosts: pgsql-server
+  tasks:
+  - name: install PostgreSQL and psycopg2 for the ansible module
+    yum:
+      pkg: "{{ item }}"
+      state: present
+    with_items:
+      - python-psycopg2
+      - postgresql
+      - postgresql-server
+  - stat:
+      path: "/var/lib/pgsql/data/postgresql.conf"
+    register: st
+  - command: "postgresql-setup initdb"
+    when: not st.stat.exists
+  - service:
+      name: postgresql
+      enabled: yes
+      state: started
+
