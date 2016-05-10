@@ -5,3 +5,5 @@ playbooks/deploy.retry
 # handled via ansible-galaxy
 roles/selinux
 roles/openssh
+roles/mailman3
+roles/httpd
