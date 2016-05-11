@@ -1,9 +1,6 @@
 [mailing]
 mail.phx.ovirt.org
 
-[pgsql-server]
-mail.phx.ovirt.org
-
 [phx_firewalld]
 mail.phx.ovirt.org
 

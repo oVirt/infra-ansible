@@ -5,6 +5,8 @@
   name: openssh
 - src: https://gitlab.com/osas/ansible-role-memcached.git
   name: memcached
+- src: https://gitlab.com/osas/ansible-role-postgresql.git
+  name: postgresql
 - src: https://gitlab.com/osas/ansible-role-mailman3.git
   name: mailman3
 - src: https://github.com/OSAS/ansible-role-httpd

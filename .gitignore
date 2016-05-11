@@ -6,5 +6,6 @@ playbooks/deploy.retry
 roles/selinux
 roles/openssh
 roles/memcached
+roles/postgresql
 roles/mailman3
 roles/httpd
