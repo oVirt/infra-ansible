@@ -27,6 +27,7 @@
 
 - hosts: mailing
   roles:
+  - role: memcached
   - role: mailman3
     mailman_webui_basedir: /var/www/mailman
     mailman_domains:
