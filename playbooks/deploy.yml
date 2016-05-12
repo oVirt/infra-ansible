@@ -10,6 +10,12 @@
   - role: memcached
   - role: postgresql
   - role: mailman3
+    mailman_site_owner_email: "root@ovirt.org"
+    mailman_site_admin_email: "root@ovirt.org"
+    # TODO: USE VAULT!!!
+    mailman_site_admin_password: "quack"
+    mailman_from_email: "listmaster@ovirt.org"
+    mailman_webui_name: "oVirt List Archives"
     mailman_webui_basedir: /var/www/mailman
     mailman_domains:
       - lists.ovirt.org
