@@ -17,6 +17,7 @@
     mailman_from_email: "listmaster@ovirt.org"
     mailman_webui_name: "oVirt List Archives"
     mailman_webui_basedir: /var/www/mailman
+    mailman_webui_user: mailman_webui
     mailman_domains:
       - lists.ovirt.org
     mailman_http_vhost: lists.ovirt.org
@@ -27,6 +28,6 @@
     #force_tls: True
     #use_tls: True
     wsgi_script: /var/www/mailman/config/webui.wsgi
-    wsgi_user: mailman
+    wsgi_user: mailman_webui
     allow_app_signals: True
 
