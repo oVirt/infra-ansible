@@ -30,4 +30,8 @@
     wsgi_script: /var/www/mailman/config/webui.wsgi
     wsgi_user: mailman_webui
     allow_app_signals: True
+  - role: postgrey
+    whitelist_clients:
+      - gerrit.ovirt.org
+      - redhat.com
 
