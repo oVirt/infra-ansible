@@ -34,4 +34,52 @@
     whitelist_clients:
       - gerrit.ovirt.org
       - redhat.com
+  - role: postfix
+    myhostname: "lists.ovirt.org"
+    mydestination: 
+      - "$myhostname"
+      - "linode01.ovirt.org"
+    mynetworks:
+      - 127.0.0.0/8
+      - "[::1]/128"
+      - 52.6.157.53
+      - 54.87.87.13
+      - 174.129.122.232
+      - 173.255.252.138
+      - "[2600:3c01::f03c:91ff:fe93:4b0d]"
+      - 107.22.51.207
+      - 107.22.108.18
+      - 23.22.92.7
+    auth: sasldb
+    smtpd_recipient_restrictions_custom:
+      - "check_policy_service unix:postgrey/socket"
+    alias_maps_custom:
+      - "hash:/etc/postfix/aliases.local"
+      - "hash:/etc/postfix/aliases.ml"
+    alias_database_custom:
+      - "hash:/etc/postfix/aliases.local"
+      - "hash:/etc/postfix/aliases.ml"
+    local_recipient_maps_custom:
+      - "hash:/etc/postfix/local_recipient"
+  tasks:
+  - name: install mail main aliases
+    copy:
+      src: mailing/aliases
+      dest: /etc/aliases
+    notify: reload mail aliases databases
+  - name: install mail specific aliases
+    copy:
+      src: "mailing/{{ item }}"
+      dest: "/etc/postfix/{{ item }}"
+    with_items:
+      - aliases.local
+      - aliases.ml
+    notify: reload mail aliases databases
+  - name: install mail local recipient list
+    copy:
+      src: mailing/local_recipient
+      dest: /etc/postfix/local_recipient
+    notify: reload mail system
+  # there is unfortunately no module to handle SASL databases
+  # TODO: find a way to manage /etc/sasldb2
 

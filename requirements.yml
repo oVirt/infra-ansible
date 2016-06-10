@@ -11,6 +11,8 @@
   name: mailman3
 - src: https://gitlab.com/osas/ansible-role-postgrey.git
   name: postgrey
+- src: https://gitlab.com/osas/ansible-role-postfix.git
+  name: postfix
 - src: https://github.com/OSAS/ansible-role-httpd
   name: httpd
 
