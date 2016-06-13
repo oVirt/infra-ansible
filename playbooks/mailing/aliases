@@ -92,7 +92,8 @@ support:    postmaster
 decode:     root
 
 # Person who should get root's mail
-root:       root, dcaro@redhat.com, eedri@redhat.com, misc@redhat.com, duck@redhat.Com
+#root:       root, dcaro@redhat.com, eedri@redhat.com, misc@redhat.com, duck@redhat.com
+root:       root, duck@redhat.com
 ## This should be updated to a group alias or other scheme
 ## for oVirt infrastructure sharing
 
