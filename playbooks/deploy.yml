@@ -21,6 +21,8 @@
     mailman_domains:
       - lists.ovirt.org
     mailman_http_vhost: lists.ovirt.org
+    # TODO: USE VAULT!!!
+    mailman_rest_pw: "plop"
   - role: httpd
     website_domain: lists.ovirt.org
     document_root: /var/www/mailman
