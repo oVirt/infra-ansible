@@ -12,3 +12,4 @@ roles/httpd
 roles/tor
 roles/postgrey
 roles/postfix
+roles/guest_virt_tools

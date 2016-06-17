@@ -2,6 +2,7 @@
 - hosts: all
   roles:
   - base
+  - guest_virt_tools
   - selinux
   - openssh
 
