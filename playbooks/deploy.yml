@@ -10,6 +10,8 @@
   roles:
   - role: memcached
   - role: postgresql
+    backup_databases:
+      - mailman
   - role: mailman3
     mailman_site_owner_email: "root@ovirt.org"
     mailman_site_admin_email: "root@ovirt.org"
