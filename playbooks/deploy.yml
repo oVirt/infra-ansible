@@ -26,6 +26,7 @@
     mailman_http_vhost: lists.ovirt.org
     # TODO: USE VAULT!!!
     mailman_rest_pw: "plop"
+    auth: "{{ social_auth }}"
   - role: httpd
     website_domain: lists.ovirt.org
     document_root: /var/www/mailman
