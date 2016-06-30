@@ -2,6 +2,9 @@
 facts_cache
 # created by Ansible in case of failure
 playbooks/deploy.retry
+# local admin settings
+# (ansible_become_pass for eg, provided your machine's storage is encrypted)
+group_vars/all/local_settings.yml
 # handled via ansible-galaxy
 roles/selinux
 roles/openssh
