@@ -14,3 +14,9 @@ encrypted. Use --ask-sudo-pass if you don't want to use this
 method. Currently Ansible is unable to ask _when needed_ so
 the global setting has been disabled in 'ansible.cfg'.
 
+## Global TLS certificate
+
+A wildcard certificate has been generated via Digicert and is deployed
+on all hosts, and can be used by any service. The private certificate is
+protected via Ansible Vault.
+
