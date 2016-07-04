@@ -13,19 +13,19 @@
     backup_databases:
       - mailman
   - role: mailman3
-    mailman_site_owner_email: "root@ovirt.org"
-    mailman_site_admin_email: "root@ovirt.org"
+    site_owner_email: "root@ovirt.org"
+    site_admin_email: "root@ovirt.org"
     # TODO: USE VAULT!!!
-    mailman_site_admin_password: "quack"
-    mailman_from_email: "listmaster@ovirt.org"
-    mailman_webui_name: "oVirt List Archives"
-    mailman_webui_basedir: /var/www/mailman
-    mailman_webui_user: mailman_webui
-    mailman_domains:
+    site_admin_password: "quack"
+    from_email: "listmaster@ovirt.org"
+    webui_name: "oVirt List Archives"
+    webui_basedir: /var/www/mailman
+    webui_user: mailman_webui
+    domains:
       - lists.ovirt.org
-    mailman_http_vhost: lists.ovirt.org
+    http_vhost: lists.ovirt.org
     # TODO: USE VAULT!!!
-    mailman_rest_pw: "plop"
+    rest_pw: "plop"
     auth: "{{ social_auth }}"
   - role: httpd
     website_domain: lists.ovirt.org
