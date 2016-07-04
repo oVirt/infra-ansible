@@ -61,12 +61,16 @@
       - "check_policy_service unix:postgrey/socket"
     alias_maps_custom:
       - "hash:/etc/postfix/aliases.local"
-      - "hash:/etc/postfix/aliases.ml"
     alias_database_custom:
       - "hash:/etc/postfix/aliases.local"
-      - "hash:/etc/postfix/aliases.ml"
     local_recipient_maps_custom:
       - "hash:/etc/postfix/local_recipient"
+      - "hash:/var/lib/mailman3/data/postfix_lmtp"
+    transport_maps:
+      - "hash:/var/lib/mailman3/data/postfix_lmtp"
+    relay_domains:
+      - "$mydestination"
+      - "hash:/var/lib/mailman3/data/postfix_domains" # in case other domains are added in the future
   tasks:
   - name: install mail main aliases
     copy:
@@ -79,7 +83,6 @@
       dest: "/etc/postfix/{{ item }}"
     with_items:
       - aliases.local
-      - aliases.ml
     notify: reload mail aliases databases
   - name: install mail local recipient list
     copy:
