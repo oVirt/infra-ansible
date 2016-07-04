@@ -21,8 +21,7 @@
     domains:
       - lists.ovirt.org
     http_vhost: lists.ovirt.org
-    # TODO: USE VAULT!!!
-    rest_pw: "plop"
+    rest_pw: "{{ mailman_rest_pw }}"
     auth: "{{ social_auth }}"
   - role: httpd
     website_domain: lists.ovirt.org
