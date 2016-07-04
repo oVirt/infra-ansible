@@ -14,9 +14,6 @@
       - mailman
   - role: mailman3
     site_owner_email: "root@ovirt.org"
-    site_admin_email: "root@ovirt.org"
-    # TODO: USE VAULT!!!
-    site_admin_password: "quack"
     from_email: "listmaster@ovirt.org"
     webui_name: "oVirt List Archives"
     webui_basedir: /var/www/mailman
