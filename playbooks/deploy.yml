@@ -51,9 +51,9 @@
   - role: httpd
     website_domain: lists.ovirt.org
     document_root: /var/www/mailman
-    # TODO: generate cert
-    #force_tls: True
-    #use_tls: True
+    force_tls: True
+    use_tls: True
+    star_certificate_name: star_ovirt_org
     wsgi_script: /var/www/mailman/config/webui.wsgi
     wsgi_user: mailman_webui
     allow_app_signals: True
@@ -78,6 +78,9 @@
       - 107.22.108.18
       - 23.22.92.7
     auth: sasldb
+    tls_method: manual
+    cert_file: /etc/pki/tls/certs/star_ovirt_org_bundle.crt
+    key_file: /etc/pki/tls/private/star_ovirt_org.key
     smtpd_recipient_restrictions_custom:
       - "check_policy_service unix:postgrey/socket"
     alias_maps_custom:
