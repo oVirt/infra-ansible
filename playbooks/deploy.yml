@@ -79,7 +79,7 @@
       - 23.22.92.7
     auth: sasldb
     tls_method: manual
-    cert_file: /etc/pki/tls/certs/star_ovirt_org_bundle.crt
+    cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
     key_file: /etc/pki/tls/private/star_ovirt_org.key
     smtpd_recipient_restrictions_custom:
       - "check_policy_service unix:postgrey/socket"
