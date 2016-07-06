@@ -95,6 +95,10 @@
     relay_domains:
       - "$mydestination"
       - "hash:/var/lib/mailman3/data/postfix_domains" # in case other domains are added in the future
+    regenerate_maps:
+      # excluding aliases, already taken care of through alias_database_custom
+      # excluding Mailman's maps, already taken care of by Mailman itself
+      - "hash:/etc/postfix/local_recipient"
   tasks:
   - name: install mail main aliases
     copy:
@@ -112,7 +116,7 @@
     copy:
       src: mailing/local_recipient
       dest: /etc/postfix/local_recipient
-    notify: reload mail system
+    notify: regenerate mail maps
   # there is unfortunately no module to handle SASL databases
   # TODO: find a way to manage /etc/sasldb2
 
