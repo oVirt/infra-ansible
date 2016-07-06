@@ -17,3 +17,4 @@ roles/postgrey
 roles/postfix
 roles/guest_virt_tools
 roles/entropy
+roles/sasldb

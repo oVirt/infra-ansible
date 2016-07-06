@@ -68,6 +68,9 @@
     whitelist_clients:
       - gerrit.ovirt.org
       - redhat.com
+  - role: sasldb
+    user_create: "{{ local_mail_accounts }}"
+    db_group: mail
   - role: postfix
     myhostname: "lists.ovirt.org"
     mydestination: 
