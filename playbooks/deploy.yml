@@ -32,12 +32,18 @@
   - name: generate bundle certificate file
     shell: "cat /etc/pki/tls/certs/star_ovirt_org.crt /etc/pki/tls/certs/star_ovirt_org.ca.crt >/etc/pki/tls/certs/star_ovirt_org.bundle.crt"
 
+# using phases to ensure handlers are called and deps are really ready
+#
+# phase 1: Mailman deps
 - hosts: mailing
   roles:
   - role: memcached
   - role: postgresql
     backup_databases:
       - mailman
+# phase 2: Mailman installation
+- hosts: mailing
+  roles:
   - role: mailman3
     site_owner_email: "root@ovirt.org"
     from_email: "listmaster@ovirt.org"
