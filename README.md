@@ -8,11 +8,11 @@ mail.phx.ovirt.org is used as a working example.
 
 ## Admin-specific Production Settings
 
-You can use 'group_vars/all/local_settings.yml' for you local
-settings like ansible_become_pass if your computer storage is
-encrypted. Use --ask-sudo-pass if you don't want to use this
+You can use `group_vars/all/local_settings.yml` for you local
+settings like `ansible_become_pass` if your computer storage is
+encrypted. Use `--ask-sudo-pass` if you don't want to use this
 method. Currently Ansible is unable to ask _when needed_ so
-the global setting has been disabled in 'ansible.cfg'.
+the global setting has been disabled in `ansible.cfg`.
 
 ## Global TLS certificate
 
