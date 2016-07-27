@@ -68,6 +68,8 @@
     whitelist_clients:
       - gerrit.ovirt.org
       - redhat.com
+  - role: spamassassin
+    service_profile: medium
   - role: sasldb
     user_create: "{{ local_mail_accounts }}"
     db_group: mail
@@ -109,6 +111,9 @@
       # excluding aliases, already taken care of through alias_database_custom
       # excluding Mailman's maps, already taken care of by Mailman itself
       - "hash:/etc/postfix/local_recipient"
+    with_spamassassin: true
+    smtpd_options:
+      content_filter: spamfilter
   tasks:
   - name: install mail main aliases
     copy:

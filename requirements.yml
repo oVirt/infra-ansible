@@ -19,6 +19,8 @@
   name: postfix
 - src: https://gitlab.com/osas/ansible-role-sasldb.git
   name: sasldb
+- src: https://gitlab.com/osas/ansible-role-spamassassin.git
+  name: spamassassin
 - src: https://github.com/OSAS/ansible-role-httpd
   name: httpd
 
