@@ -21,6 +21,8 @@
   name: sasldb
 - src: https://gitlab.com/osas/ansible-role-spamassassin.git
   name: spamassassin
+- src: https://gitlab.com/osas/ansible-role-dovecot.git
+  name: dovecot
 - src: https://github.com/OSAS/ansible-role-httpd
   name: httpd
 

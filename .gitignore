@@ -19,3 +19,4 @@ roles/guest_virt_tools
 roles/entropy
 roles/sasldb
 roles/spamassassin
+roles/dovecot

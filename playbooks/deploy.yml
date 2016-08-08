@@ -120,6 +120,12 @@
     with_spamassassin: true
     smtpd_options:
       content_filter: spamfilter
+  - role: dovecot
+    with_pop3: true
+    ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
+    cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
+    key_file: /etc/pki/tls/private/star_ovirt_org.key
+    auth: yaml-dict
   tasks:
   - name: install mail main aliases
     copy:
@@ -138,4 +144,8 @@
       src: mailing/local_recipient
       dest: /etc/postfix/local_recipient
     notify: regenerate mail maps
+  - name: install Dovecot users
+    copy:
+      src: mailing/users/
+      dest: /etc/dovecot/users/
 
