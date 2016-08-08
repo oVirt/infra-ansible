@@ -138,6 +138,4 @@
       src: mailing/local_recipient
       dest: /etc/postfix/local_recipient
     notify: regenerate mail maps
-  # there is unfortunately no module to handle SASL databases
-  # TODO: find a way to manage /etc/sasldb2
 
