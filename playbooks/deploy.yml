@@ -96,19 +96,14 @@
     tls_method: manual
     cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
     key_file: /etc/pki/tls/private/star_ovirt_org.key
-    smtpd_recipient_restrictions_custom:
-      - "check_policy_service unix:postgrey/socket"
+    with_postgrey: true
+    with_mailman3: true
     alias_maps_custom:
       - "hash:/etc/postfix/aliases.local"
     alias_database_custom:
       - "hash:/etc/postfix/aliases.local"
     local_recipient_maps_custom:
       - "hash:/etc/postfix/local_recipient"
-      - "hash:/var/lib/mailman3/data/postfix_lmtp"
-    transport_maps:
-      - "hash:/var/lib/mailman3/data/postfix_lmtp"
-    relay_domains:
-      - "hash:/var/lib/mailman3/data/postfix_domains" # in case other domains are added in the future
     regenerate_maps:
       # excluding aliases, already taken care of through alias_database_custom
       # excluding Mailman's maps, already taken care of by Mailman itself
