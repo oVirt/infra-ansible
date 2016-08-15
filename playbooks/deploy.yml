@@ -98,14 +98,14 @@
     key_file: /etc/pki/tls/private/star_ovirt_org.key
     with_postgrey: true
     with_mailman3: true
-    alias_maps_custom:
+    alias_maps:
       - "hash:/etc/postfix/aliases.local"
-    alias_database_custom:
+    alias_database:
       - "hash:/etc/postfix/aliases.local"
-    local_recipient_maps_custom:
+    local_recipient_maps:
       - "hash:/etc/postfix/local_recipient"
     regenerate_maps:
-      # excluding aliases, already taken care of through alias_database_custom
+      # excluding aliases, already taken care of through alias_database
       # excluding Mailman's maps, already taken care of by Mailman itself
       - "hash:/etc/postfix/local_recipient"
     with_spamassassin: true
