@@ -82,11 +82,8 @@
   - role: postfix
     myhostname: "lists.ovirt.org"
     mydestination: 
-      - "$myhostname"
       - "linode01.ovirt.org"
     mynetworks:
-      - 127.0.0.0/8
-      - "[::1]/128"
       - 52.6.157.53
       - 54.87.87.13
       - 174.129.122.232
@@ -111,7 +108,6 @@
     transport_maps:
       - "hash:/var/lib/mailman3/data/postfix_lmtp"
     relay_domains:
-      - "$mydestination"
       - "hash:/var/lib/mailman3/data/postfix_domains" # in case other domains are added in the future
     regenerate_maps:
       # excluding aliases, already taken care of through alias_database_custom
