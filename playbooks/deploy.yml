@@ -98,19 +98,11 @@
     key_file: /etc/pki/tls/private/star_ovirt_org.key
     with_postgrey: true
     with_mailman3: true
-    alias_maps:
-      - "hash:/etc/postfix/aliases.local"
-    alias_database:
-      - "hash:/etc/postfix/aliases.local"
-    local_recipient_maps:
-      - "hash:/etc/postfix/local_recipient"
-    regenerate_maps:
-      # excluding aliases, already taken care of through alias_database
-      # excluding Mailman's maps, already taken care of by Mailman itself
-      - "hash:/etc/postfix/local_recipient"
     with_spamassassin: true
     smtpd_options:
       content_filter: spamfilter
+    local_accounts:
+      - jira
   - role: dovecot
     with_pop3: true
     ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
