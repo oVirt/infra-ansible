@@ -9,7 +9,7 @@
 
 # Basic system aliases -- these MUST be present.
 mailer-daemon:  postmaster
-postmaster: mscherer@redhat.com
+postmaster: mscherer@redhat.com, duck@redhat.com
 
 # General redirections for pseudo accounts.
 bin:        root
