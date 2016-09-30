@@ -33,11 +33,12 @@
     webui_user: mailman_webui
     domains:
       - lists.ovirt.org
-    http_vhost: lists.ovirt.org
+      - mail.phx.ovirt.org
+    http_vhost: mail.phx.ovirt.org
     rest_pw: "{{ mailman_rest_pw }}"
     auth: "{{ social_auth }}"
   - role: httpd
-    website_domain: lists.ovirt.org
+    website_domain: mail.phx.ovirt.org
     document_root: /var/www/mailman
     force_tls: True
     use_tls: True
@@ -55,7 +56,7 @@
     user_create: "{{ local_mail_accounts }}"
     db_group: mail
   - role: postfix
-    myhostname: "lists.ovirt.org"
+    myhostname: "mail.phx.ovirt.org"
     mydestination: 
       - "linode01.ovirt.org"
     mynetworks:
