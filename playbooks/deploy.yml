@@ -80,6 +80,54 @@
       content_filter: spamfilter
     local_accounts:
       - jira
+    aliases:
+      # Person who should get root's mail
+      root:
+        - root
+        - duck@redhat.com
+        # disable until ready for production
+        #- dcaro@redhat.com
+        #- eedri@redhat.com
+        #- misc@redhat.com
+      www: webmaster
+      webmaster: root
+      noc: root
+      hostmaster: root
+      info: postmaster
+      sales: postmaster
+      support: postmaster
+      # trap decode to catch security attacks
+      decode: root
+      ## This should be updated to a group alias or other scheme
+      ## for oVirt infrastructure sharing
+      contact: misc@redhat.com
+      # aliases that jira would use
+      infra-support: jira
+      community: mariel@redhat.com
+      ## Random new aliases we create
+      wordpress: mariel@redhat.com
+      twitter:
+        - bproffit@redhat.com
+        - mariel@redhat.com
+      identica:
+        - bproffit@redhat.com
+        - mariel@redhat.com
+      ovirtbot:
+        - eedri@redhat.com
+        - dcaro@redhat.com
+      kerri: kcatallo@redhat.com
+      pr: kerri
+      press: kerri
+      hootsuite:
+        - dcaroest@redhat.com
+        - eedri@redhat.com
+      quaid: kwade@redhat.com
+      events:
+        - bproffit@redhat.com
+        - mariel@redhat.com
+      ovirt-copr:
+        - eedri@redhat.com
+        - dcaroest@redhat.com
   - role: dovecot
     with_pop3: true
     ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
@@ -87,11 +135,6 @@
     key_file: /etc/pki/tls/private/star_ovirt_org.key
     auth: yaml-dict
   tasks:
-  - name: install mail main aliases
-    copy:
-      src: mailing/aliases
-      dest: /etc/aliases
-    notify: reload mail aliases databases
   - name: install Dovecot users
     copy:
       src: mailing/users/
