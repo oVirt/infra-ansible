@@ -43,6 +43,7 @@
     force_tls: True
     use_tls: True
     use_letsencrypt: True
+    mail_domain: ovirt.org
     wsgi_script: /var/www/mailman/config/webui.wsgi
     wsgi_user: mailman_webui
     allow_app_signals: True
@@ -91,18 +92,6 @@
       src: mailing/aliases
       dest: /etc/aliases
     notify: reload mail aliases databases
-  - name: install mail specific aliases
-    copy:
-      src: "mailing/{{ item }}"
-      dest: "/etc/postfix/{{ item }}"
-    with_items:
-      - aliases.local
-    notify: reload mail aliases databases
-  - name: install mail local recipient list
-    copy:
-      src: mailing/local_recipient
-      dest: /etc/postfix/local_recipient
-    notify: regenerate mail maps
   - name: install Dovecot users
     copy:
       src: mailing/users/
