@@ -55,6 +55,8 @@
     service_profile: medium
   - role: sasldb
     user_create: "{{ local_mail_accounts }}"
+    user_delete:
+      - wiki@ovirt.org
     db_group: mail
   - role: postfix
     myhostname: "mail.phx.ovirt.org"
