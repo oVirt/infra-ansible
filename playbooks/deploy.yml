@@ -6,31 +6,6 @@
   - guest_virt_tools
   - selinux
   - openssh
-  tasks:
-  - name: install public certificate files
-    copy:
-      src: "tls/{{ item }}"
-      dest: "/etc/pki/tls/certs/{{ item }}"
-      owner: root
-      group: root
-      mode: 0644
-    with_items:
-      - star_ovirt_org.crt
-      - star_ovirt_org.ca.crt
-    notify: generate bundle certificate file
-  - name: install private certificate files
-    copy:
-      src: "tls/{{ item }}"
-      dest: "/etc/pki/tls/private/{{ item }}"
-      owner: root
-      group: root
-      mode: 0600
-    with_items:
-      - star_ovirt_org.key
-    notify: generate bundle certificate file
-  handlers:
-  - name: generate bundle certificate file
-    shell: "cat /etc/pki/tls/certs/star_ovirt_org.crt /etc/pki/tls/certs/star_ovirt_org.ca.crt >/etc/pki/tls/certs/star_ovirt_org.bundle.crt"
 
 # using phases to ensure handlers are called and deps are really ready
 #
@@ -66,7 +41,7 @@
     document_root: /var/www/mailman
     force_tls: True
     use_tls: True
-    star_certificate_name: star_ovirt_org
+    use_letsencrypt: True
     wsgi_script: /var/www/mailman/config/webui.wsgi
     wsgi_user: mailman_webui
     allow_app_signals: True
