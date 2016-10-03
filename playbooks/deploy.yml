@@ -63,14 +63,8 @@
     mydestination: 
       - "linode01.ovirt.org"
     mynetworks:
-      - 52.6.157.53
-      - 54.87.87.13
-      - 174.129.122.232
       - 173.255.252.138
       - "[2600:3c01::f03c:91ff:fe93:4b0d]"
-      - 107.22.51.207
-      - 107.22.108.18
-      - 23.22.92.7
     auth: sasldb
     tls_method: manual
     cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
