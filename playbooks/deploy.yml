@@ -99,15 +99,11 @@
       contact: misc@redhat.com
       # aliases that jira would use
       infra-support: jira
-      community: mariel@redhat.com
+      community: bproffit@redhat.com
       ## Random new aliases we create
-      wordpress: mariel@redhat.com
-      twitter:
-        - bproffit@redhat.com
-        - mariel@redhat.com
-      identica:
-        - bproffit@redhat.com
-        - mariel@redhat.com
+      wordpress: bproffit@redhat.com
+      twitter: bproffit@redhat.com
+      identica: bproffit@redhat.com
       ovirtbot:
         - eedri@redhat.com
         - dcaro@redhat.com
@@ -118,9 +114,7 @@
         - dcaroest@redhat.com
         - eedri@redhat.com
       quaid: kwade@redhat.com
-      events:
-        - bproffit@redhat.com
-        - mariel@redhat.com
+      events: bproffit@redhat.com
       ovirt-copr:
         - eedri@redhat.com
         - dcaroest@redhat.com
