@@ -16,106 +16,133 @@
   - role: postgresql
     backup_databases:
       - mailman
-# phase 2: Mailman installation
-- hosts: mailing
-  roles:
-  - role: mailman3
-    site_owner_email: "root@ovirt.org"
-    site_admins:
-      - "duck"
-      - "duck-rh"
-      - "misc"
-      - "eedri"
-      - "ederevea"
-    from_email: "listmaster@ovirt.org"
-    webui_name: "oVirt List Archives"
-    webui_basedir: /var/www/mailman
-    webui_user: mailman_webui
-    domains:
-      - lists.ovirt.org
-      - mail.phx.ovirt.org
-    http_vhost: mail.phx.ovirt.org
-    rest_pw: "{{ mailman_rest_pw }}"
-    auth: "{{ social_auth }}"
-  - role: httpd
-    website_domain: mail.phx.ovirt.org
-    document_root: /var/www/mailman
-    force_tls: True
-    use_tls: True
-    use_letsencrypt: True
-    mail_domain: ovirt.org
-    wsgi_script: /var/www/mailman/config/webui.wsgi
-    wsgi_user: mailman_webui
-    allow_app_signals: True
-  - role: postgrey
-    whitelist_clients:
-      - gerrit.ovirt.org
-      - redhat.com
   - role: spamassassin
     service_profile: medium
-  - role: sasldb
-    user_create: "{{ local_mail_accounts }}"
-    user_delete:
-      - wiki@ovirt.org
-    db_group: mail
-  - role: postfix
-    myhostname: "mail.phx.ovirt.org"
-    mydestination: 
-      - "linode01.ovirt.org"
-    mynetworks:
-      - 173.255.252.138
-      - "[2600:3c01::f03c:91ff:fe93:4b0d]"
-    auth: sasldb
-    tls_method: manual
-    cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
-    key_file: /etc/pki/tls/private/star_ovirt_org.key
-    with_postgrey: true
-    with_mailman3: true
-    with_spamassassin: true
-    smtpd_options:
-      content_filter: spamfilter
-    local_accounts:
-      - jira
-    aliases:
-      # Person who should get root's mail
-      root:
-        - root
-        - duck@redhat.com
-        # disable until ready for production
-        #- eedri@redhat.com
-        #- misc@redhat.com
-      www: webmaster
-      webmaster: root
-      noc: root
-      hostmaster: root
-      info: postmaster
-      sales: postmaster
-      support: postmaster
-      # trap decode to catch security attacks
-      decode: root
-      contact: infra-private@ovirt.org
-      # aliases that jira would use
-      infra-support: jira
-      community: bproffit@redhat.com
-      ## Random new aliases we create
-      wordpress: bproffit@redhat.com
-      twitter: bproffit@redhat.com
-      identica: bproffit@redhat.com
-      ovirtbot: eedri@redhat.com
-      kerri: kcatallo@redhat.com
-      pr: kerri
-      press: kerri
-      hootsuite: eedri@redhat.com
-      quaid: kwade@redhat.com
-      events: bproffit@redhat.com
-      ovirt-copr: eedri@redhat.com
-  - role: dovecot
-    with_pop3: true
-    ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
-    cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
-    key_file: /etc/pki/tls/private/star_ovirt_org.key
-    auth: yaml-dict
+
+# phase 2: Mailman installation
+- hosts: mail.phx.ovirt.org
+  vars:
+    webapp_user: mailman_webui
+    webapp_path: /var/www/mailman
   tasks:
+  - include_role:
+      name: mailman3
+    vars:
+      site_owner_email: "root@ovirt.org"
+      site_admins:
+        - "duck"
+        - "duck-rh"
+        - "misc"
+        - "eedri"
+        - "ederevea"
+      from_email: "listmaster@ovirt.org"
+      webui_name: "oVirt List Archives"
+      webui_basedir: "{{ webapp_path }}"
+      webui_user: "{{ webapp_user }}"
+      domains:
+        lists.ovirt.org: "oVirt mailing-lists"
+        mail.phx.ovirt.org: "oVirt mailing-lists"
+        mail.ovirt.org: "oVirt mailing-lists"
+      http_vhost: "{{ ansible_fqdn }}"
+      rest_pw: "{{ mailman_rest_pw }}"
+      auth: "{{ social_auth }}"
+      with_fedora_auth: True
+  - include_role:
+      name: httpd
+      tasks_from: server
+    vars:
+      use_wsgi: True
+      wsgi_allow_app_signals: True
+  - include_role:
+      name: httpd
+      tasks_from: vhost
+    vars:
+      website_domain: "{{ ansible_fqdn }}"
+      document_root: "{{ webapp_path }}"
+      force_tls: True
+      use_tls: True
+      use_letsencrypt: True
+      mail_domain: ovirt.org
+  - include_role:
+      name: httpd
+      tasks_from: wsgi
+    vars:
+      website_domain: "{{ ansible_fqdn }}"
+      wsgi_instance: mailman3
+      wsgi_script: "{{ webapp_path }}/config/webui.wsgi"
+      wsgi_user: "{{ webapp_user }}"
+      wsgi_home: "{{ webapp_path }}"
+  - include_role:
+      name: postgrey
+    vars:
+      whitelist_clients:
+        - gerrit.ovirt.org
+        - redhat.com
+  - include_role:
+      name: sasldb
+    vars:
+      user_create: "{{ local_mail_accounts }}"
+      user_delete:
+        - wiki@ovirt.org
+      db_group: mail
+  - include_role:
+      name: postfix
+    vars:
+      myhostname: "{{ ansible_fqdn }}"
+      mynetworks:
+        - 66.187.230.42
+      auth: sasldb
+      tls_method: manual
+      cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
+      key_file: /etc/pki/tls/private/star_ovirt_org.key
+      with_postgrey: true
+      with_mailman3: true
+      with_spamassassin: true
+      smtpd_options:
+        content_filter: spamfilter
+      local_accounts:
+        - jira
+      aliases:
+        # Person who should get root's mail
+        root:
+          - root
+          - duck@redhat.com
+          # disable until ready for production
+          #- eedri@redhat.com
+          #- misc@redhat.com
+        www: webmaster
+        webmaster: root
+        noc: root
+        hostmaster: root
+        info: postmaster
+        sales: postmaster
+        support: postmaster
+        # trap decode to catch security attacks
+        decode: root
+        contact: infra-private@ovirt.org
+        # aliases that jira would use
+        infra-support: jira
+        community: bproffit@redhat.com
+        ## Random new aliases we create
+        wordpress: bproffit@redhat.com
+        twitter: bproffit@redhat.com
+        identica: bproffit@redhat.com
+        ovirtbot: eedri@redhat.com
+        kerri: kcatallo@redhat.com
+        pr: kerri
+        press: kerri
+        hootsuite: eedri@redhat.com
+        quaid: kwade@redhat.com
+        events: bproffit@redhat.com
+        ovirt-copr: eedri@redhat.com
+  - include_role:
+      name: dovecot
+    vars:
+      with_pop3: true
+      ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
+      cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
+      key_file: /etc/pki/tls/private/star_ovirt_org.key
+      auth: yaml-dict
   - name: install Dovecot users
     copy:
       src: mailing/users/
