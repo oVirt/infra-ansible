@@ -94,9 +94,7 @@
       support: postmaster
       # trap decode to catch security attacks
       decode: root
-      ## This should be updated to a group alias or other scheme
-      ## for oVirt infrastructure sharing
-      contact: misc@redhat.com
+      contact: infra-private@ovirt.org
       # aliases that jira would use
       infra-support: jira
       community: bproffit@redhat.com
