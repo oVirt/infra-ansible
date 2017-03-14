@@ -82,7 +82,6 @@
         - root
         - duck@redhat.com
         # disable until ready for production
-        #- dcaro@redhat.com
         #- eedri@redhat.com
         #- misc@redhat.com
       www: webmaster
@@ -102,20 +101,14 @@
       wordpress: bproffit@redhat.com
       twitter: bproffit@redhat.com
       identica: bproffit@redhat.com
-      ovirtbot:
-        - eedri@redhat.com
-        - dcaro@redhat.com
+      ovirtbot: eedri@redhat.com
       kerri: kcatallo@redhat.com
       pr: kerri
       press: kerri
-      hootsuite:
-        - dcaroest@redhat.com
-        - eedri@redhat.com
+      hootsuite: eedri@redhat.com
       quaid: kwade@redhat.com
       events: bproffit@redhat.com
-      ovirt-copr:
-        - eedri@redhat.com
-        - dcaroest@redhat.com
+      ovirt-copr: eedri@redhat.com
   - role: dovecot
     with_pop3: true
     ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
