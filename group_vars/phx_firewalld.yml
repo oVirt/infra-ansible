@@ -1,2 +1,2 @@
 ---
-ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q foreman.ovirt.org"'
+ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q monitoring.ovirt.org"'
