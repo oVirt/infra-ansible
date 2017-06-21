@@ -28,14 +28,14 @@
   - include_role:
       name: mailman3
     vars:
-      site_owner_email: "root@ovirt.org"
+      site_owner_email: "root@{{ ovirt_domain }}"
       site_admins:
         - "duck"
         - "duck-rh"
         - "misc"
         - "eedri"
         - "ederevea"
-      from_email: "listmaster@ovirt.org"
+      from_email: "listmaster@{{ ovirt_domain }}"
       webui_name: "oVirt List Archives"
       webui_basedir: "{{ webapp_path }}"
       webui_user: "{{ webapp_user }}"
@@ -62,7 +62,7 @@
       force_tls: True
       use_tls: True
       use_letsencrypt: True
-      mail_domain: ovirt.org
+      mail_domain: "{{ ovirt_domain }}"
   - include_role:
       name: httpd
       tasks_from: wsgi
@@ -104,12 +104,7 @@
         - jira
       aliases:
         # Person who should get root's mail
-        root:
-          - root
-          - duck@redhat.com
-          # disable until ready for production
-          #- eedri@redhat.com
-          #- misc@redhat.com
+        root: "{{ ['root'] + ovirt_infra_emails }}"
         www: webmaster
         webmaster: root
         noc: root
@@ -119,22 +114,22 @@
         support: postmaster
         # trap decode to catch security attacks
         decode: root
-        contact: infra-private@ovirt.org
+        contact: "{{ ovirt_infra_ml_pv }}"
         # aliases that jira would use
         infra-support: jira
-        community: bproffit@redhat.com
+        community: "{{ ovirt_community_emails }}"
         ## Random new aliases we create
         wordpress: community
         twitter: community
         identica: community
-        ovirtbot: eedri@redhat.com
-        kerri: kcatallo@redhat.com
-        pr: kerri
-        press: kerri
-        hootsuite: eedri@redhat.com
-        quaid: kwade@redhat.com
+        ovirtbot: "{{ eedri_mail }}"
+        kerri: "{{ kerri_mail }}"
+        pr: "{{ ovirt_press_emails }}"
+        press: "{{ ovirt_press_emails }}"
+        hootsuite: "{{ eedri_mail }}"
+        quaid: "{{ quaid_mail }}"
         events: community
-        ovirt-copr: eedri@redhat.com
+        ovirt-copr: "{{ eedri_mail }}"
   - include_role:
       name: dovecot
     vars:
