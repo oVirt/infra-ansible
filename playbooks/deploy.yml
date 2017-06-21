@@ -124,16 +124,16 @@
         infra-support: jira
         community: bproffit@redhat.com
         ## Random new aliases we create
-        wordpress: bproffit@redhat.com
-        twitter: bproffit@redhat.com
-        identica: bproffit@redhat.com
+        wordpress: community
+        twitter: community
+        identica: community
         ovirtbot: eedri@redhat.com
         kerri: kcatallo@redhat.com
         pr: kerri
         press: kerri
         hootsuite: eedri@redhat.com
         quaid: kwade@redhat.com
-        events: bproffit@redhat.com
+        events: community
         ovirt-copr: eedri@redhat.com
   - include_role:
       name: dovecot
