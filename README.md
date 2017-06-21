@@ -6,6 +6,8 @@ Currently it is using Foreman+Puppet, so this is a first shot at
 preparing a future migration. The migration to Mailman 3 on
 mail.phx.ovirt.org is used as a working example.
 
+You need Ansible >=2.3 to be able to handle the (new) YAML-based 'hosts' file format.
+
 ## Admin-specific Production Settings
 
 You can use `group_vars/all/local_settings.yml` for you local
