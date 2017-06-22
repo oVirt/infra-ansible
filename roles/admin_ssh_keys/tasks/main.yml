@@ -1,0 +1,14 @@
+---
+- name: install root ssh keys
+  authorized_key: user=root
+                  key="{{ item }}"
+  with_file:
+  - misc.pub
+  - misc2.pub
+  - quaid.pub
+  - duck.pub
+  - eedri.pub
+  - ederevea.pub
+  - bkorren.pub
+  - amarchuk.pub
+
