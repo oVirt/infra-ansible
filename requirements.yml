@@ -31,4 +31,6 @@
   version: duck_work_during_misc_vacation
 - src: git+https://gitlab.com/osas/ansible-role-msmtp.git
   name: msmtp
+- src: git+https://gitlab.com/osas/ansible-role-unattended_updates.git
+  name: unattended_updates
 

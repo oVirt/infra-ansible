@@ -6,6 +6,7 @@
   - guest_virt_tools
   - selinux
   - openssh
+  - unattended_updates
 
 # using phases to ensure handlers are called and deps are really ready
 #

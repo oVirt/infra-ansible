@@ -22,3 +22,4 @@ roles/spamassassin
 roles/dovecot
 roles/builder
 roles/msmtp
+roles/unattended_updates
