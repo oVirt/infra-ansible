@@ -1,2 +1,3 @@
 ---
 ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q monitoring.ovirt.org"'
+mail_forwarder: lists.phx.ovirt.org

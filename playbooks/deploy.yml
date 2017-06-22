@@ -143,3 +143,28 @@
       src: mailing/users/
       dest: /etc/dovecot/users/
 
+- hosts: web_builders
+  vars:
+    website_username: web_builder
+  roles:
+  - role: builder
+    name: "{{ website_name }}"
+    builder: "{{ website_builder | default('middleman') }}"
+    builder_username: "{{ website_username }}"
+    git_url: "{{ website_repo_url }}"
+    git_version: master
+    auto_deploy_hour: "*/6"
+    cron_error_email: "{{ osas_builder_error_email }}"
+  - role: msmtp
+    smart_host: "{{ mail_forwarder }}"
+    disable_freeipa: true
+  tasks:
+  - name: fetch dashboard
+    cron:
+      name: "fetch dashboard"
+      minute: "0"
+      hour: "*/6"
+      user: "{{ website_username }}"
+      job: "cd /srv/builder/{{ website_name }} && ./fetch-dashboard.rb"
+    when: website_has_dashboard is defined and website_has_dashboard
+

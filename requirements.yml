@@ -26,4 +26,9 @@
 - src: https://github.com/OSAS/ansible-role-httpd
   name: httpd
   version: duck_work_during_misc_vacation
+- src: https://github.com/OSAS/ansible-role-middleman_builder
+  name: builder
+  version: duck_work_during_misc_vacation
+- src: git+https://gitlab.com/osas/ansible-role-msmtp.git
+  name: msmtp
 

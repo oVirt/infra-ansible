@@ -1,0 +1,4 @@
+---
+website_name: ovirt_web
+website_repo_url: https://github.com/oVirt/ovirt-site.git
+website_has_dashboard: True
