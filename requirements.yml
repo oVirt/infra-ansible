@@ -1,36 +1,37 @@
 ---
-- src: https://github.com/OSAS/ansible-role-selinux
+- src: git+https://github.com/OSAS/ansible-role-selinux.git
   name: selinux
-- src: https://github.com/OSAS/ansible-role-openssh.git
+- src: git+https://github.com/OSAS/ansible-role-openssh.git
   name: openssh
-- src: https://gitlab.com/osas/ansible-role-entropy.git
+- src: git+https://gitlab.com/osas/ansible-role-entropy.git
   name: entropy
-- src: https://gitlab.com/osas/ansible-role-guest_virt_tools.git
+- src: git+https://gitlab.com/osas/ansible-role-guest_virt_tools.git
   name: guest_virt_tools
-- src: https://gitlab.com/osas/ansible-role-memcached.git
+- src: git+https://gitlab.com/osas/ansible-role-memcached.git
   name: memcached
-- src: https://gitlab.com/osas/ansible-role-postgresql.git
+- src: git+https://gitlab.com/osas/ansible-role-postgresql.git
   name: postgresql
-- src: https://gitlab.com/osas/ansible-role-mailman3.git
+- src: git+https://gitlab.com/osas/ansible-role-mailman3.git
   name: mailman3
-- src: https://gitlab.com/osas/ansible-role-postgrey.git
+- src: git+https://gitlab.com/osas/ansible-role-postgrey.git
   name: postgrey
-- src: https://gitlab.com/osas/ansible-role-postfix.git
+- src: git+https://gitlab.com/osas/ansible-role-postfix.git
   name: postfix
-- src: https://gitlab.com/osas/ansible-role-sasldb.git
+- src: git+https://gitlab.com/osas/ansible-role-sasldb.git
   name: sasldb
-- src: https://gitlab.com/osas/ansible-role-spamassassin.git
+- src: git+https://gitlab.com/osas/ansible-role-spamassassin.git
   name: spamassassin
-- src: https://gitlab.com/osas/ansible-role-dovecot.git
+- src: git+https://gitlab.com/osas/ansible-role-dovecot.git
   name: dovecot
-- src: https://github.com/OSAS/ansible-role-httpd
+- src: git+https://github.com/OSAS/ansible-role-httpd.git
   name: httpd
   version: duck_work_during_misc_vacation
-- src: https://github.com/OSAS/ansible-role-middleman_builder
+- src: git+https://github.com/OSAS/ansible-role-middleman_builder.git
   name: builder
   version: duck_work_during_misc_vacation
 - src: git+https://gitlab.com/osas/ansible-role-msmtp.git
   name: msmtp
 - src: git+https://gitlab.com/osas/ansible-role-unattended_updates.git
   name: unattended_updates
-
+- src: git+https://gitlab.com/misc/ansible-role-tor.git
+  name: tor

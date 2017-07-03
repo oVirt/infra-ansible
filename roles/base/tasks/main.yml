@@ -16,12 +16,15 @@
   - tcpdump
   - chrony
 
-- service: name=chronyd state=running enabled=yes
+- name: Install NTP client
+  service: name=chronyd state=running enabled=yes
 
-- stat: path=/etc/cloud/cloud.cfg.d
+- name: Test if the host is an AWS instance
+  stat: path=/etc/cloud/cloud.cfg.d
   register: cloud_init
 
-- copy: dest=/etc/cloud/cloud.cfg.d/06_preserve_hostname.cfg src=06_preserve_hostname.cfg
+- name: Preserver AWS instance hostname
+  copy: dest=/etc/cloud/cloud.cfg.d/06_preserve_hostname.cfg src=06_preserve_hostname.cfg
   when: cloud_init.stat.isdir is defined and cloud_init.stat.isdir
 
 - name: install firewalld on centos7
@@ -29,10 +32,12 @@
   when: ansible_distribution == 'Fedora' or ansible_distribution_major_version == '7'
 
 # work around cloud image who disable firewalld
-- command: systemctl unmask firewalld
+- name: Ensure Firewalld is not disabled
+  command: systemctl unmask firewalld
   args:
     removes: /etc/systemd/system/firewalld.service
   when: ansible_distribution == 'Fedora'
 
-- service: name=firewalld state=started enabled=yes
+- name: Start Firewalld
+  service: name=firewalld state=started enabled=yes
   when: ansible_distribution == 'Fedora' or ansible_distribution_major_version == '7'

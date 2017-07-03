@@ -26,7 +26,8 @@
     webapp_user: mailman_webui
     webapp_path: /var/www/mailman
   tasks:
-  - include_role:
+  - name: Install Mailman 3
+    include_role:
       name: mailman3
     vars:
       site_owner_email: "root@{{ ovirt_domain }}"
@@ -48,13 +49,15 @@
       rest_pw: "{{ mailman_rest_pw }}"
       auth: "{{ social_auth }}"
       with_fedora_auth: True
-  - include_role:
+  - name: Install Web Server
+    include_role:
       name: httpd
       tasks_from: server
     vars:
       use_wsgi: True
       wsgi_allow_app_signals: True
-  - include_role:
+  - name: Create Vhost for Mailing-Lists
+    include_role:
       name: httpd
       tasks_from: vhost
     vars:
@@ -64,7 +67,8 @@
       use_tls: True
       use_letsencrypt: True
       mail_domain: "{{ ovirt_domain }}"
-  - include_role:
+  - name: Create WSGI instance for Mailing-Lists
+    include_role:
       name: httpd
       tasks_from: wsgi
     vars:
@@ -73,20 +77,23 @@
       wsgi_script: "{{ webapp_path }}/config/webui.wsgi"
       wsgi_user: "{{ webapp_user }}"
       wsgi_home: "{{ webapp_path }}"
-  - include_role:
+  - name: Install Grey-Listing
+    include_role:
       name: postgrey
     vars:
       whitelist_clients:
         - gerrit.ovirt.org
         - redhat.com
-  - include_role:
+  - name: Create SASL accounts for SMTP authentication
+    include_role:
       name: sasldb
     vars:
       user_create: "{{ local_mail_accounts }}"
       user_delete:
         - wiki@ovirt.org
       db_group: mail
-  - include_role:
+  - name: Install Mail server
+    include_role:
       name: postfix
     vars:
       myhostname: "{{ ansible_fqdn }}"
@@ -131,7 +138,8 @@
         quaid: "{{ quaid_mail }}"
         events: community
         ovirt-copr: "{{ eedri_mail }}"
-  - include_role:
+  - name: Install MDA
+    include_role:
       name: dovecot
     vars:
       with_pop3: true
