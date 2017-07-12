@@ -138,6 +138,7 @@
         quaid: "{{ quaid_mail }}"
         events: community
         ovirt-copr: "{{ eedri_mail }}"
+        infra-twitter: infra-private
   - name: Install MDA
     include_role:
       name: dovecot
