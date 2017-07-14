@@ -1,8 +1,34 @@
 ---
+
+- name: Load settings based on distribution
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "sys_{{ ansible_distribution }}.yml"
+    - "sys_{{ ansible_os_family }}.yml"
+
 # do not merge with next item, since epel need to be installed first
 - name: install Epel
   package: pkg=epel-release state=present
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+
+# cannot use 'yum copr' as yum-plugin-copr is missing on CentOS despite Copr's doc
+# also there is no Ansible module for it
+- name: setup the OSAS Infra repo
+  yum_repository:
+    name: osas_infra
+    description: Copr repo for OSAS ComInfra Team
+    baseurl: "https://copr-be.cloud.fedoraproject.org/results/duck/osas-infra-team-rpm-repo/{{ rpm_repo_component }}/"
+    gpgkey: "https://copr-be.cloud.fedoraproject.org/results/duck/osas-infra-team-rpm-repo/pubkey.gpg"
+    repo_gpgcheck: False
+    gpgcheck: True
+    skip_if_unavailable: True
+    state: present
+    enabled: True
+  when: ansible_os_family == 'RedHat'
+  notify: Clean YUM Metadata
+
+# after all repos are setup and before installing packages
+- meta: flush_handlers
 
 - name: install base rpms
   package: pkg={{ item }} state=present
