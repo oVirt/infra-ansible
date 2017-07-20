@@ -28,7 +28,6 @@
   version: duck_work_during_misc_vacation
 - src: git+https://github.com/OSAS/ansible-role-middleman_builder.git
   name: builder
-  version: duck_work_during_misc_vacation
 - src: git+https://gitlab.com/osas/ansible-role-msmtp.git
   name: msmtp
 - src: git+https://gitlab.com/osas/ansible-role-unattended_updates.git
