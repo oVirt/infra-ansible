@@ -32,5 +32,5 @@
   name: msmtp
 - src: git+https://gitlab.com/osas/ansible-role-unattended_updates.git
   name: unattended_updates
-- src: git+https://gitlab.com/misc/ansible-role-tor.git
+- src: git+https://gitlab.com/osas/ansible-role-tor.git
   name: tor
