@@ -7,6 +7,7 @@
   - selinux
   - openssh
   - unattended_updates
+  - chrony
   tags: base
 
 # use inventory_hostname or webui_vhost as hostname for MX and IMAP (TLS SAN OK)

@@ -40,10 +40,6 @@
   - strace
   - vim-enhanced
   - tcpdump
-  - chrony
-
-- name: Install NTP client
-  service: name=chronyd state=running enabled=yes
 
 - name: Test if the host is an AWS instance
   stat: path=/etc/cloud/cloud.cfg.d

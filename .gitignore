@@ -24,3 +24,4 @@ roles/builder
 roles/msmtp
 roles/unattended_updates
 roles/mailing-lists-server
+roles/chrony

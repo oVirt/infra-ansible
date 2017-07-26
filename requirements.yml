@@ -36,3 +36,5 @@
   name: tor
 - src: git+https://gitlab.com/osas/ansible-role-mailing-lists-server.git
   name: mailing-lists-server
+- src: git+https://gitlab.com/osas/ansible-role-chrony.git
+  name: chrony
