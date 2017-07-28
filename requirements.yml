@@ -34,3 +34,5 @@
   name: unattended_updates
 - src: git+https://gitlab.com/osas/ansible-role-tor.git
   name: tor
+- src: git+https://gitlab.com/osas/ansible-role-mailing-lists-server.git
+  name: mailing-lists-server

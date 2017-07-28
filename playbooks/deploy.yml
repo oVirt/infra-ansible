@@ -7,151 +7,95 @@
   - selinux
   - openssh
   - unattended_updates
+  tags: base
 
-# using phases to ensure handlers are called and deps are really ready
-#
-# phase 1: Mailman deps
-- hosts: mailing
-  roles:
-  - role: memcached
-  - role: postgresql
-    backup_databases:
-      - mailman
-  - role: spamassassin
-    service_profile: medium
-
-# phase 2: Mailman installation
-- hosts: mail.phx.ovirt.org
+# use inventory_hostname or webui_vhost as hostname for MX and IMAP (TLS SAN OK)
+- hosts: mail.ovirt.org
   vars:
-    webapp_user: mailman_webui
-    webapp_path: /var/www/mailman
+    webui_vhost: lists.ovirt.org
+  roles:
+  - role: mailing-lists-server
+    name: "oVirt List Archives"
+    domain: "{{ ovirt_domain }}"
+    admin_users:
+      - duck
+      - duck-rh
+      - misc
+      - eedri
+      - ederevea
+    mail_aliases:
+      # Person who should get root's mail
+      root: "{{ ['root'] + ovirt_infra_emails }}"
+      listmaster: root
+      www: webmaster
+      webmaster: root
+      noc: root
+      hostmaster: root
+      info: postmaster
+      sales: postmaster
+      support: postmaster
+      # trap decode to catch security attacks
+      decode: root
+      contact: "{{ ovirt_infra_ml_pv }}"
+      # aliases that jira would use
+      infra-support: jira
+      community: "{{ ovirt_community_emails }}"
+      ## Random new aliases we create
+      wordpress: community
+      twitter: community
+      identica: community
+      ovirtbot: "{{ eedri_mail }}"
+      kerri: "{{ kerri_mail }}"
+      pr: "{{ ovirt_press_emails }}"
+      press: "{{ ovirt_press_emails }}"
+      hootsuite: "{{ eedri_mail }}"
+      quaid: "{{ quaid_mail }}"
+      events: community
+      ovirt-copr: "{{ eedri_mail }}"
+      infra-twitter: infra-private
+    use_simple_tls: True
+    # social_auth is defined in host_vars
+    # caught by underlying 'mailman3' role
+    with_fedora_auth: True
+    # caught by underlying 'postgrey' role
+    whitelist_clients:
+      - gerrit.ovirt.org
+      - redhat.com
+    # caught by underlying 'postfix' role
+    mynetworks:
+      - 66.187.230.42
+    local_accounts:
+      - jira
+  - role: dovecot
+    with_pop3: true
+    # inherit TLS settings from 'mailing-lists-server' role
+    auth: yaml-dict
   tasks:
-  - name: Install Mailman 3
-    include_role:
-      name: mailman3
-    vars:
-      site_owner_email: "root@{{ ovirt_domain }}"
-      site_admins:
-        - "duck"
-        - "duck-rh"
-        - "misc"
-        - "eedri"
-        - "ederevea"
-      from_email: "listmaster@{{ ovirt_domain }}"
-      webui_name: "oVirt List Archives"
-      webui_basedir: "{{ webapp_path }}"
-      webui_user: "{{ webapp_user }}"
-      domains:
-        lists.ovirt.org: "oVirt mailing-lists"
-        mail.phx.ovirt.org: "oVirt mailing-lists"
-        mail.ovirt.org: "oVirt mailing-lists"
-      http_vhost: "{{ ansible_fqdn }}"
-      rest_pw: "{{ mailman_rest_pw }}"
-      auth: "{{ social_auth }}"
-      with_fedora_auth: True
-  - name: Install Web Server
-    include_role:
-      name: httpd
-      tasks_from: server
-    vars:
-      use_wsgi: True
-      wsgi_allow_app_signals: True
-  - name: Create Vhost for Mailing-Lists
-    include_role:
-      name: httpd
-      tasks_from: vhost
-    vars:
-      website_domain: "{{ ansible_fqdn }}"
-      document_root: "{{ webapp_path }}"
-      force_tls: True
-      use_tls: True
-      use_letsencrypt: True
-      mail_domain: "{{ ovirt_domain }}"
-  - name: Create WSGI instance for Mailing-Lists
-    include_role:
-      name: httpd
-      tasks_from: wsgi
-    vars:
-      website_domain: "{{ ansible_fqdn }}"
-      wsgi_instance: mailman3
-      wsgi_script: "{{ webapp_path }}/config/webui.wsgi"
-      wsgi_user: "{{ webapp_user }}"
-      wsgi_home: "{{ webapp_path }}"
-  - name: Install Grey-Listing
-    include_role:
-      name: postgrey
-    vars:
-      whitelist_clients:
-        - gerrit.ovirt.org
-        - redhat.com
-  - name: Create SASL accounts for SMTP authentication
-    include_role:
-      name: sasldb
-    vars:
-      user_create: "{{ local_mail_accounts }}"
-      user_delete:
-        - wiki@ovirt.org
-      db_group: mail
-  - name: Install Mail server
-    include_role:
-      name: postfix
-    vars:
-      myhostname: "{{ ansible_fqdn }}"
-      mynetworks:
-        - 66.187.230.42
-      auth: sasldb
-      tls_method: manual
-      cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
-      key_file: /etc/pki/tls/private/star_ovirt_org.key
-      with_postgrey: true
-      with_mailman3: true
-      with_spamassassin: true
-      smtpd_options:
-        content_filter: spamfilter
-      local_accounts:
-        - jira
-      aliases:
-        # Person who should get root's mail
-        root: "{{ ['root'] + ovirt_infra_emails }}"
-        www: webmaster
-        webmaster: root
-        noc: root
-        hostmaster: root
-        info: postmaster
-        sales: postmaster
-        support: postmaster
-        # trap decode to catch security attacks
-        decode: root
-        contact: "{{ ovirt_infra_ml_pv }}"
-        # aliases that jira would use
-        infra-support: jira
-        community: "{{ ovirt_community_emails }}"
-        ## Random new aliases we create
-        wordpress: community
-        twitter: community
-        identica: community
-        ovirtbot: "{{ eedri_mail }}"
-        kerri: "{{ kerri_mail }}"
-        pr: "{{ ovirt_press_emails }}"
-        press: "{{ ovirt_press_emails }}"
-        hootsuite: "{{ eedri_mail }}"
-        quaid: "{{ quaid_mail }}"
-        events: community
-        ovirt-copr: "{{ eedri_mail }}"
-        infra-twitter: infra-private
-  - name: Install MDA
-    include_role:
-      name: dovecot
-    vars:
-      with_pop3: true
-      ca_file: /etc/pki/tls/certs/star_ovirt_org.ca.crt
-      cert_file: /etc/pki/tls/certs/star_ovirt_org.bundle.crt
-      key_file: /etc/pki/tls/private/star_ovirt_org.key
-      auth: yaml-dict
+  - name: Configure web access to old ML archives
+    copy:
+      src: "mailing/web/old_ml_archives.conf"
+      # Duck: we should think about making _vhost_confdir part of the public API
+      dest: "{{ _vhost_confdir }}/"
+      owner: root
+      group: root
+      mode: 0744
+    notify: reload httpd
   - name: install Dovecot users
     copy:
       src: mailing/users/
       dest: /etc/dovecot/users/
+  - name: redirect oVirt website apex
+    include_role:
+      name: httpd
+      tasks_from: vhost
+    vars:
+      website_domain: "{{ ovirt_domain }}"
+      redirects:
+      - src: "^/(.*)"
+        target: "http://www.{{ ovirt_domain }}/$1"
+        match: True
+      # deploy DigiCert files manually
+      use_letsencrypt: False
 
 - hosts: web_builders
   vars:
