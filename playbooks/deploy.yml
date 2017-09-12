@@ -14,64 +14,69 @@
 - hosts: mail.ovirt.org
   vars:
     webui_vhost: lists.ovirt.org
-  roles:
-  - role: mailing-lists-server
-    name: "oVirt List Archives"
-    domain: "{{ ovirt_domain }}"
-    admin_users:
-      - duck
-      - duck-rh
-      - misc
-      - eedri
-      - ederevea
-    mail_aliases:
-      # Person who should get root's mail
-      root: "{{ ['root'] + ovirt_infra_emails }}"
-      listmaster: root
-      www: webmaster
-      webmaster: root
-      noc: root
-      hostmaster: root
-      info: postmaster
-      sales: postmaster
-      support: postmaster
-      # trap decode to catch security attacks
-      decode: root
-      contact: "{{ ovirt_infra_ml_pv }}"
-      # aliases that jira would use
-      infra-support: jira
-      community: "{{ ovirt_community_emails }}"
-      ## Random new aliases we create
-      wordpress: community
-      twitter: community
-      identica: community
-      ovirtbot: "{{ eedri_mail }}"
-      kerri: "{{ kerri_mail }}"
-      pr: "{{ ovirt_press_emails }}"
-      press: "{{ ovirt_press_emails }}"
-      hootsuite: "{{ eedri_mail }}"
-      quaid: "{{ quaid_mail }}"
-      events: community
-      ovirt-copr: "{{ eedri_mail }}"
-      infra-twitter: infra-private
-    use_simple_tls: True
-    # social_auth is defined in host_vars
-    # caught by underlying 'mailman3' role
-    with_fedora_auth: True
-    # caught by underlying 'postgrey' role
-    whitelist_clients:
-      - gerrit.ovirt.org
-      - redhat.com
-    # caught by underlying 'postfix' role
-    mynetworks:
-      - 66.187.230.42
-    local_accounts:
-      - jira
-  - role: dovecot
-    with_pop3: true
-    # inherit TLS settings from 'mailing-lists-server' role
-    auth: yaml-dict
   tasks:
+  - name: Install Mailing-Lists Server
+    include_role:
+      name: mailing-lists-server
+    vars:
+      name: "oVirt List Archives"
+      domain: "{{ ovirt_domain }}"
+      admin_users:
+        - duck
+        - duck-rh
+        - misc
+        - eedri
+        - ederevea
+      mail_aliases:
+        # Person who should get root's mail
+        root: "{{ ['root'] + ovirt_infra_emails }}"
+        listmaster: root
+        www: webmaster
+        webmaster: root
+        noc: root
+        hostmaster: root
+        info: postmaster
+        sales: postmaster
+        support: postmaster
+        # trap decode to catch security attacks
+        decode: root
+        contact: "{{ ovirt_infra_ml_pv }}"
+        # aliases that jira would use
+        infra-support: jira
+        community: "{{ ovirt_community_emails }}"
+        ## Random new aliases we create
+        wordpress: community
+        twitter: community
+        identica: community
+        ovirtbot: "{{ eedri_mail }}"
+        kerri: "{{ kerri_mail }}"
+        pr: "{{ ovirt_press_emails }}"
+        press: "{{ ovirt_press_emails }}"
+        hootsuite: "{{ eedri_mail }}"
+        quaid: "{{ quaid_mail }}"
+        events: community
+        ovirt-copr: "{{ eedri_mail }}"
+        infra-twitter: infra-private
+      use_simple_tls: True
+      # social_auth is defined in host_vars
+      # caught by underlying 'mailman3' role
+      with_fedora_auth: True
+      # caught by underlying 'postgrey' role
+      whitelist_clients:
+        - gerrit.ovirt.org
+        - redhat.com
+      # caught by underlying 'postfix' role
+      mynetworks:
+        - 66.187.230.42
+      local_accounts:
+        - jira
+  - name: Install POP3 Server
+    include_role:
+      name: dovecot
+    vars:
+      with_pop3: true
+      # inherit TLS settings from 'mailing-lists-server' role
+      auth: yaml-dict
   - name: Configure web access to old ML archives
     copy:
       src: "mailing/web/old_ml_archives.conf"
