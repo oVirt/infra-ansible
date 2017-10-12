@@ -41,6 +41,16 @@
   - vim-enhanced
   - tcpdump
   - lsof
+  - needrestart
+  - dialog # useful for debconf and in turn needrestart
+
+- name: Install specific needrestart config
+  copy:
+    src: needrestart_osas.conf
+    dest: /etc/needrestart/conf.d/50_osas.conf
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Test if the host is an AWS instance
   stat: path=/etc/cloud/cloud.cfg.d
