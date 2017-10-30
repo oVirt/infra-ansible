@@ -23,9 +23,8 @@
   name: spamassassin
 - src: git+https://gitlab.com/osas/ansible-role-dovecot.git
   name: dovecot
-- src: git+https://github.com/OSAS/ansible-role-httpd.git
+- src: git+https://gitlab.com/osas/ansible-role-ah-httpd.git
   name: httpd
-  version: duck_work_during_misc_vacation
 - src: git+https://github.com/OSAS/ansible-role-web_builder.git
   name: builder
 - src: git+https://gitlab.com/osas/ansible-role-msmtp.git
