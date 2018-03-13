@@ -60,16 +60,23 @@
   copy: dest=/etc/cloud/cloud.cfg.d/06_preserve_hostname.cfg src=06_preserve_hostname.cfg
   when: cloud_init.stat.isdir is defined and cloud_init.stat.isdir
 
-- name: install firewalld on centos7
-  package: pkg=firewalld state=installed
-  when: ansible_distribution == 'Fedora' or ansible_distribution_major_version == '7'
-
-# work around cloud image who disable firewalld
-- name: Ensure Firewalld is not disabled
-  command: systemctl unmask firewalld
-  args:
-    removes: /etc/systemd/system/firewalld.service
-  when: ansible_distribution == 'Fedora'
+- block:
+  - name: install firewalld if available
+    package:
+      pkg: firewalld
+      state: installed
+  - name: work around cloud image who disable firewalld
+    systemd:
+      name: firewalld
+      masked: no
+      enabled: yes # one of 'state' or 'enabled' is compulsory
+    when: ansible_distribution == 'Fedora'
+  - name: start firewalld service
+    service:
+      name: firewalld
+      state: started
+      enabled: yes
+  when: ansible_distribution == 'Fedora' or (ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7)
 
 - name: Start Firewalld
   service: name=firewalld state=started enabled=yes
