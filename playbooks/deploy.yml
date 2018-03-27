@@ -20,7 +20,7 @@
     include_role:
       name: mailing-lists-server
     vars:
-      name: "oVirt List Archives"
+      display_name: "oVirt List Archives"
       domain: "{{ ovirt_domain }}"
       admin_users:
         - duck
@@ -110,7 +110,7 @@
     website_username: web_builder
   roles:
   - role: builder
-    name: "{{ website_name }}"
+    builder_name: "{{ website_name }}"
     builder: "{{ website_builder | default('middleman') }}"
     builder_username: "{{ website_username }}"
     git_url: "{{ website_repo_url }}"
