@@ -92,6 +92,13 @@
     copy:
       src: mailing/users/
       dest: /etc/dovecot/users/
+  - name: Auto-expire Jenkins mailbox
+    cron:
+      name: "Auto-expire Jenkins mailbox"
+      minute: "21"
+      hour: "6"
+      user: root
+      job: "doveadm expunge -u jenkins mailbox Inbox savedbefore 30d"
 
 - hosts: web_builders
   vars:
