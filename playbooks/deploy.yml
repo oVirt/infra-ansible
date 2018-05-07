@@ -71,6 +71,7 @@
         - 66.187.230.42
       local_accounts:
         - jira
+        - jenkins
   - name: Install POP3 Server
     include_role:
       name: dovecot

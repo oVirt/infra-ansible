@@ -1,0 +1,6 @@
+---
+uid: nobody
+gid: mail
+password: "{SHA512-CRYPT}$6$BIcFpTxuhjZgxHk5$7IyZPW0DGzdSsL.y0Q5dsr3Z.Xx/e12s31I55nyExmL.57mmpKoA/8PdCN5QLe2QM2m7BCk8wkxneEwqt1YAZ1"
+home: /var/mail/
+mail: "maildir:/var/mail/%u"
