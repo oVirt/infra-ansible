@@ -92,19 +92,6 @@
     copy:
       src: mailing/users/
       dest: /etc/dovecot/users/
-  # TODO: not necessary anymore, handled by new www host; remove after DNS is sure to have reached all Internet caches
-  - name: redirect oVirt website apex
-    include_role:
-      name: httpd
-      tasks_from: vhost
-    vars:
-      website_domain: "{{ ovirt_domain }}"
-      redirects:
-      - src: "^/(.*)"
-        target: "http://www.{{ ovirt_domain }}/$1"
-        match: True
-      # deploy DigiCert files manually
-      use_letsencrypt: False
 
 - hosts: web_builders
   vars:
