@@ -86,7 +86,7 @@
       dest: "{{ _vhost_confdir }}/"
       owner: root
       group: root
-      mode: 0744
+      mode: 0644
     notify: reload httpd
   - name: install Dovecot users
     copy:
