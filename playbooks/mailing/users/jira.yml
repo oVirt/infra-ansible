@@ -3,4 +3,4 @@ uid: nobody
 gid: mail
 password: "{SHA512-CRYPT}$6$IOS3W5Ut09SJBFWW$AL4063Hq/ZUDvr.Hg8WxZnEH1IwumBslJzrcq8CS.fMwybowMGUDNR6S.VxOY5A/ySwGR4JZiyJkXUPxbvtwx/"
 home: /var/mail/
-mail: "maildir:/var/mail/%u"
+mail: "maildir:/var/mail/jira"
