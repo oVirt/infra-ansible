@@ -37,3 +37,5 @@
   name: mailing-lists-server
 - src: git+https://gitlab.com/osas/ansible-role-chrony.git
   name: chrony
+- src: https://github.com/OSAS/ansible-role-swap_file
+  name: swap_file

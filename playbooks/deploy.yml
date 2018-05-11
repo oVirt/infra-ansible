@@ -16,6 +16,12 @@
   vars:
     webui_vhost: lists.ovirt.org
   tasks:
+  - name: Add swap
+    include_role:
+      name: swap_file
+    vars:
+      size: 1G
+      path: /var/swap
   - name: Install Mailing-Lists Server
     include_role:
       name: mailing-lists-server
