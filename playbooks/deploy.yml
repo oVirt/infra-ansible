@@ -30,9 +30,8 @@
       domain: "{{ ovirt_domain }}"
       admin_users:
         - duck
-        - duck-rh
         - misc
-        - eedri
+        - eyal
         - ederevea
       mail_aliases:
         # Person who should get root's mail
