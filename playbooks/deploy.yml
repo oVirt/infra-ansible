@@ -150,4 +150,7 @@
         use_letsencrypt: True
         mail_domain: ovirt.org
         force_tls: True
+        redirects:
+          - src: /stats
+            target: https://ovirt.biterg.io/
 
