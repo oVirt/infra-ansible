@@ -63,6 +63,7 @@
         events: community
         ovirt-copr: "{{ eedri_mail }}"
         infra-twitter: infra-private
+        privacy: infra-private
       use_simple_tls: True
       # social_auth is defined in host_vars
       # caught by underlying 'mailman3' role
