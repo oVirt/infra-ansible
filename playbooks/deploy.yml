@@ -73,6 +73,7 @@
         - gerrit.ovirt.org
         - redhat.com
       # caught by underlying 'postfix' role
+      myorigin: "{{ ovirt_domain }}"
       mynetworks:
         - 66.187.230.42
       local_accounts:
