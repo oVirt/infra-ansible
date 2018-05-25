@@ -80,6 +80,13 @@
       local_accounts:
         - jira
         - jenkins
+  - name: Discard very-likely SPAM
+    blockinfile:
+      path: /etc/postfix/header_checks
+      block: |
+        /^X-Spam-Level: \*{8,}/ DISCARD
+      marker: "# {mark} ANSIBLE MANAGED BLOCK ML-SPAM"
+    notify: reload mail system
   - name: Install POP3 Server
     include_role:
       name: dovecot
