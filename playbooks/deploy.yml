@@ -123,15 +123,6 @@
   - role: msmtp
     smart_host: "{{ mail_forwarder }}"
     disable_freeipa: true
-  tasks:
-  - name: fetch dashboard
-    cron:
-      name: "fetch dashboard"
-      minute: "0"
-      hour: "*/6"
-      user: "{{ website_username }}"
-      job: "cd /srv/builder/{{ website_name }} && ./fetch-dashboard.rb"
-    when: website_has_dashboard is defined and website_has_dashboard
 
 - hosts: www.phx.ovirt.org
   tasks:
