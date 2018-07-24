@@ -131,7 +131,7 @@
     smart_host: "{{ mail_forwarder }}"
     disable_freeipa: true
 
-- hosts: www.phx.ovirt.org
+- hosts: www.ovirt.org
   tasks:
     - name: create web builder's user
       user:

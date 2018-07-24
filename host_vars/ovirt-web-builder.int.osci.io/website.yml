@@ -1,6 +1,6 @@
 ---
 website_name: ovirt_web
 website_repo_url: https://github.com/oVirt/ovirt-site.git
-rsync_server: www.phx.ovirt.org
-rsync_user: "{{ hostvars['www.phx.ovirt.org']['websync_user'] }}"
-rsync_location: "{{ hostvars['www.phx.ovirt.org']['websync_path'] }}"
+rsync_server: www.ovirt.org
+rsync_user: "{{ hostvars['www.ovirt.org']['websync_user'] }}"
+rsync_location: "{{ hostvars['www.ovirt.org']['websync_path'] }}"
