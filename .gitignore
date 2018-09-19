@@ -12,6 +12,7 @@ roles/memcached
 roles/postgresql
 roles/mailman3
 roles/httpd
+roles/httpd_php
 roles/tor
 roles/postgrey
 roles/postfix

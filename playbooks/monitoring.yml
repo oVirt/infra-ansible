@@ -1,0 +1,35 @@
+---
+
+# TODO: Icinga installation
+
+- hosts: monitoring.ovirt.org
+  tasks:
+    # the nagios and pnp4nagios packages install server-wide config files
+    # which define /nagios but unfortunately also prevent from having
+    # Icinga only available in this vhost
+    - name: "Create vhost for {{ inventory_hostname }}"
+      include_role:
+        name: httpd
+        tasks_from: vhost
+      vars:
+        website_domain: "{{ inventory_hostname }}"
+        use_tls: True
+        use_letsencrypt: True
+        mail_domain: ovirt.org
+        force_tls: True
+        redirects:
+          - src: "^/$"
+            target: /nagios
+            match: True
+        # TODO: needed for mod_php, remove when PHP FPM support is ready
+        disable_modern_mpm: True
+    - name: Install PHP for the vhost
+      include_role:
+        name: httpd_php
+      vars:
+        disable_dangerous_functions: True
+        extra_open_paths:
+          - /usr/share/nagios/html
+          - /etc/nagios
+          - /etc/pnp4nagios
+

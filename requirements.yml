@@ -25,6 +25,8 @@
   name: dovecot
 - src: git+https://gitlab.com/osas/ansible-role-ah-httpd.git
   name: httpd
+- src: git+https://vcs-git.duckcorp.org/duckcorp/ansible-role-httpd_php
+  name: httpd_php
 - src: git+https://github.com/OSAS/ansible-role-web_builder.git
   name: builder
 - src: git+https://gitlab.com/osas/ansible-role-msmtp.git
