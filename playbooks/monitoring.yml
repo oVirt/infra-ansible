@@ -32,4 +32,6 @@
           - /usr/share/nagios/html
           - /etc/nagios
           - /etc/pnp4nagios
+          - /var/lib/pnp4nagios
+          - /usr/bin/rrdtool
 
