@@ -11,6 +11,7 @@
   - ederevea.pub
   - bkorren.pub
   - amarchuk.pub
+  - grosenth.pub
 
 - name: Remove old root ssh keys
   authorized_key:
