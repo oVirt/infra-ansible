@@ -1,0 +1,7 @@
+# starting 2018-11, similarly as RDO in the past
+header CN_SPAM_1 From =~ /\d+\@qq\.com/i
+score CN_SPAM_1 10
+
+# residual SPAM not caught by previous rule
+header CN_SPAM_2 Subject =~ /[点。]COM/i
+score CN_SPAM_2 10

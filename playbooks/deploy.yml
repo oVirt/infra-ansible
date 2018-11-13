@@ -15,6 +15,8 @@
 - hosts: mail.ovirt.org
   vars:
     webui_vhost: lists.ovirt.org
+    # due to https://github.com/ansible/ansible/issues/21890
+    sa_config_bits: /etc/mail/spamassassin/local.cf.d
   tasks:
   - name: Add swap
     include_role:
@@ -82,6 +84,12 @@
       local_accounts:
         - jira
         - jenkins
+  # quick fix for SPAM generating a low Spamassassin score
+  - name: SPAM filtering
+    copy:
+      src: "mailing/sa_ovirt_mls.cf"
+      dest: "{{ sa_config_bits }}/10_ovirt_mls.cf"
+    notify: regenerate spamassassin configuration
   - name: Discard very-likely SPAM
     blockinfile:
       path: /etc/postfix/header_checks
