@@ -67,6 +67,7 @@
         ovirt-copr: "{{ eedri_mail }}"
         infra-twitter: infra-private
         privacy: infra-private
+        kubevirt-ci: infra-private
         # default assignee in bugzilla, no reply expected
         bugs: /dev/null
       use_simple_tls: True
