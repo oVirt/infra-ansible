@@ -72,6 +72,7 @@
   - name: Install Mailing-Lists Server
     include_role:
       name: mailing-lists-server
+      public: yes
     vars:
       display_name: "oVirt List Archives"
       domain: "{{ ovirt_domain }}"
@@ -132,6 +133,26 @@
       local_accounts:
         - jira
         - jenkins
+      use_custom_favicon: True
+  - name: Install custom favicon
+    copy:
+      src: "mailing/web/{{ item }}"
+      dest: "{{ webapp_path }}/static-extra/"
+      owner: root
+      group: root
+      mode: 0644
+    loop:
+      - favicon.ico
+      - ovirt_logo.png
+    notify: Update static files
+  - name: Install custom branded navbar template
+    copy:
+      src: "mailing/web/navbar-brand.html"
+      dest: "{{ webapp_path }}/templates/hyperkitty/"
+      owner: root
+      group: root
+      mode: 0644
+    notify: reload apache
   # quick fix for SPAM generating a low Spamassassin score
   - name: SPAM filtering
     copy:
