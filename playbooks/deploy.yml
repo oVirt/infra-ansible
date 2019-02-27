@@ -11,6 +11,57 @@
   - chrony
   tags: base
 
+
+- hosts: mail.ovirt.org
+  vars:
+    vg_name: "data"
+    ml_lv_name: "mailman"
+    fs_type: xfs
+  tasks:
+  - name: Add swap file
+    include_role:
+      name: swap_file
+    vars:
+      size: 1G
+      path: /var/swap
+  - name: Test if partition for extra data exists
+    stat:
+      path: /dev/vdb1
+    register: data_1
+  - name: Partition disk for extra data
+    parted:
+      device: /dev/vdb
+      label: gpt
+      number: 1
+      name: "data_1"
+      flags: [ lvm ]
+      state: present
+    when: not data_1.stat.exists
+  - name: Create LVM VG for extra data
+    lvg:
+      vg: "{{ vg_name }}"
+      pvs: "/dev/vdb1"
+      state: present
+  # if we need more, adding a new PV in the VG would be very easy
+  - name: Create LVM LV for Mailing-Lists data
+    lvol:
+      lv: "{{ ml_lv_name }}"
+      vg: "{{ vg_name }}"
+      size: "100%VG"
+      state: present
+  - name: Create filesystem for Mailing-Lists data
+    filesystem:
+      fstype: "{{ fs_type }}"
+      dev: "/dev/{{ vg_name }}/{{ ml_lv_name }}"
+  - name: Mount filesystem for Mailing-Lists data
+    mount:
+      src: "/dev/{{ vg_name }}/{{ ml_lv_name }}"
+      path: /srv/data
+      fstype: "{{ fs_type }}"
+      state: mounted
+  tags: partitioning
+
+
 # use inventory_hostname or webui_vhost as hostname for MX and IMAP (TLS SAN OK)
 - hosts: mail.ovirt.org
   vars:
@@ -18,12 +69,6 @@
     # due to https://github.com/ansible/ansible/issues/21890
     sa_config_bits: /etc/mail/spamassassin/local.cf.d
   tasks:
-  - name: Add swap
-    include_role:
-      name: swap_file
-    vars:
-      size: 1G
-      path: /var/swap
   - name: Install Mailing-Lists Server
     include_role:
       name: mailing-lists-server
@@ -125,6 +170,32 @@
       hour: "6"
       user: root
       job: "doveadm expunge -u jenkins mailbox Inbox savedbefore 30d"
+
+
+- hosts: mail.ovirt.org
+  tasks:
+    - name: use the second disk for all Mailman3 data
+      include_role:
+        name: data_movebind
+      vars:
+        src: /var/lib/mailman3
+        dest: /srv/data/mailman3-lib
+        services:
+          - crond
+          - mailman3
+          - httpd
+    - name:  use the second disk for all Hyperkitty+Postorius data
+      include_role:
+        name: data_movebind
+      vars:
+        src: /var/www/mailman
+        dest: /srv/data/mailman3-www
+        services:
+          - crond
+          - mailman3
+          - httpd
+  tags: ml_storage
+
 
 - hosts: web_builders
   vars:

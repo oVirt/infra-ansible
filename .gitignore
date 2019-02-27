@@ -27,3 +27,4 @@ roles/unattended_updates
 roles/mailing-lists-server
 roles/chrony
 roles/httpd_wsgi
+roles/data_movebind
