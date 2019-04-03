@@ -115,6 +115,8 @@
         kubevirt-ci: infra-private
         # default assignee in bugzilla, no reply expected
         bugs: /dev/null
+        # email used by Zuul, we don't need the replies
+        zuul: /dev/null
       use_simple_tls: True
       # social_auth is defined in host_vars
       # caught by underlying 'mailman3' role
