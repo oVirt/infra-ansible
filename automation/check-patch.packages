@@ -1,4 +1,4 @@
 ansible
 ansible-lint
-python-flake8
+python2-pip
 git

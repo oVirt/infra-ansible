@@ -5,6 +5,10 @@ playbooks/deploy.retry
 # local admin settings
 # (ansible_become_pass for eg, provided your machine's storage is encrypted)
 group_vars/all/local_settings.yml
+# Python optimized files
+*.pyo
+*.pyc
+__pycache__
 # handled via ansible-galaxy
 roles/selinux
 roles/openssh

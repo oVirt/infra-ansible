@@ -10,11 +10,12 @@ ansible --version
 echo ========================= Ansible-lint version =========================
 ansible-lint --version
 echo ============================ flake8 version ============================
+pip install flake8
 flake8 --version
 
 
 echo ============================= flake8 check =============================
-flake8 --exclude=$(find . -mindepth 2 -name ".git" -printf "%h,") --ignore=E126,E131,E501,E303 .
+flake8 --exclude=plugins/strategy/mitogen_linear.py,$(find . -mindepth 2 -name ".git" -printf "%h,") --ignore=E126,E131,E501,E303 .
 
 echo ========================== Ansible-lint check ==========================
 ansible-lint -p --nocolor $(find . -mindepth 2 -name ".git" -printf "--exclude=%h ") playbooks/*.yml 
