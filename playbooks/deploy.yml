@@ -82,6 +82,7 @@
         - eyal
         - ederevea
         - doronf
+        - didi
       mail_aliases:
         # Person who should get root's mail
         root: "{{ ['root'] + ovirt_infra_emails }}"
