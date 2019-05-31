@@ -135,6 +135,23 @@
         - jira
         - jenkins
       use_custom_favicon: True
+
+  # needed for the 'synchronize' module
+  - name: "Install rsync"
+    package:
+      name: rsync
+      state: present
+  - name: "Install Mail Templates"
+    synchronize:
+      src: "mailing/mail_templates/{{ item }}/"
+      dest: "/var/lib/mailman3/templates/{{ item }}/"
+      owner: no
+      group: no
+      delete: yes
+    loop:
+      - site
+    notify: restart mailman3
+
   - name: Install custom favicon
     copy:
       src: "mailing/web/{{ item }}"

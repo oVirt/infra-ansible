@@ -1,0 +1,6 @@
+_______________________________________________
+$display_name mailing list -- $listname
+To unsubscribe send an email to ${short_listname}-leave@${domain}
+Privacy Statement: https://www.ovirt.org/site/privacy-policy/
+oVirt Code of Conduct: https://www.ovirt.org/community/about/community-guidelines/
+List Archives: ${hyperkitty_url}
