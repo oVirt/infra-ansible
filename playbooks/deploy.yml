@@ -276,6 +276,9 @@
         redirects:
           - src: /stats
             target: https://ovirt.biterg.io/
+          - src: "^/blog/(.*)\\.html"
+            target: "http://blogs.ovirt.org/$1/"
+            match: True
           - src: "^/blog/(.*)"
             target: "http://blogs.ovirt.org/$1"
             match: True
