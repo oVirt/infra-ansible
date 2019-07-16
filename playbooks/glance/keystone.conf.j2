@@ -1,0 +1,20 @@
+[DEFAULT]
+log_dir=/var/log/keystone
+[catalog]
+template_file=/etc/keystone/default_catalog.templates
+driver=sql
+[credential]
+key_repository=/etc/keystone/credential-keys
+[database]
+connection=mysql+pymysql://keystone:{{ keystone_dbpass }}@127.0.0.1/keystone
+[eventlet_server]
+admin_workers=2
+public_workers=1
+[fernet_tokens]
+key_repository=/etc/keystone/fernet-keys
+[token]
+expiration=3600
+provider=fernet
+revoke_by_id=True
+[ssl]
+enable=False
