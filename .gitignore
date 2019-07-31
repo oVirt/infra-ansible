@@ -32,3 +32,4 @@ roles/mailing-lists-server
 roles/chrony
 roles/httpd_wsgi
 roles/data_movebind
+roles/lvm_partition

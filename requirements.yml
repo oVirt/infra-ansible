@@ -45,4 +45,5 @@
   name: httpd_wsgi
 - src: git+https://gitlab.com/osas/ansible-role-data_movebind.git
   name: data_movebind
-
+- src: git+https://gitlab.com/OSAS/ansible-role-lvm_partition.git
+  name: lvm_partition

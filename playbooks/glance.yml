@@ -1,5 +1,27 @@
 ---
 - hosts: glance.ovirt.org
+  vars:
+    device: /dev/vdb
+  tasks:
+    - name: Add lvm on data disk
+      filesystem:
+        dev: "{{ device }}"
+        fstype: lvm
+    - name: Create a volume group on data disk
+      lvg:
+        pvs: "{{ device }}"
+        vg: "{{ data_vg_name }}"
+    - name: Create a LV for Glance images
+      include_role:
+        name: lvm_partition
+      vars:
+        vg: "{{ data_vg_name }}"
+        lv_name: glance
+        size: 20G
+        path: /var/lib/glance
+  tags: storage
+
+- hosts: glance.ovirt.org
   tasks:
   - name: Install OpenStack Stein release RPM on CentOS
     package:
