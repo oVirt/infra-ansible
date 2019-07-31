@@ -7,14 +7,14 @@ debug=False
 log_file=/var/log/glance/registry.log
 log_dir=/var/log/glance
 [database]
-connection=mysql+pymysql://glance:{{ glance_dbpass }}@127.0.0.1/glance
+connection=mysql+pymysql://glance:{{ credentials['glance_dbpass'] }}@127.0.0.1/glance
 [keystone_authtoken]
 www_authenticate_uri=http://127.0.0.1:5000/v3
 auth_uri=http://127.0.0.1:5000/v3
 auth_type=password
 auth_url=http://127.0.0.1:5000
 username=admin
-password={{ admin_pass }}
+password={{ credentials['admin_pass'] }}
 user_domain_name=Default
 project_name=admin
 project_domain_name=Default

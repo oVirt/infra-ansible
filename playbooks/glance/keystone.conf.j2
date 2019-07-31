@@ -6,7 +6,7 @@ driver=sql
 [credential]
 key_repository=/etc/keystone/credential-keys
 [database]
-connection=mysql+pymysql://keystone:{{ keystone_dbpass }}@127.0.0.1/keystone
+connection=mysql+pymysql://keystone:{{ credentials['keystone_dbpass'] }}@127.0.0.1/keystone
 [eventlet_server]
 admin_workers=2
 public_workers=1

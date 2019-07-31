@@ -30,10 +30,23 @@
       state: directory
       mode: 0700
   - name: Initialize credentials
+    copy:
+      dest: /root/credentials/glance.yaml
+      content: |
+        keystone_dbpass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
+        glance_dbpass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
+        admin_pass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
+      owner: root
+      group: root
+      mode: 0600
+      force: no
+  - name: Fetch credentials
+    slurp:
+      src: /root/credentials/glance.yaml
+    register: credentials_encoded
+  - name: Extract credentials
     set_fact:
-      keystone_dbpass: "{{ lookup('password', '/root/credentials/keystone_dbpass length=12 chars=ascii_letters,numbers') }}"
-      glance_dbpass: "{{ lookup('password', '/root/credentials/glance_dbpass length=12 chars=ascii_letters,numbers') }}"
-      admin_pass: "{{ lookup('password', '/root/credentials/admin_pass length=12 chars=ascii_letters,numbers') }}"
+      credentials: "{{ credentials_encoded['content'] | b64decode | from_yaml }}"
   - name: Create keystone database
     mysql_db:
       name: keystone
@@ -42,7 +55,7 @@
   - name: Create keystone user
     mysql_user:
       name: keystone
-      password: "{{ keystone_dbpass }}"
+      password: "{{ credentials['keystone_dbpass'] }}"
       host: localhost
       append_privs: true
       priv: keystone.*:ALL
@@ -55,7 +68,7 @@
   - name: Create glance user
     mysql_user:
       name: glance
-      password: "{{ glance_dbpass }}"
+      password: "{{ credentials['glance_dbpass'] }}"
       host: localhost
       append_privs: true
       priv: glance.*:ALL
@@ -115,7 +128,7 @@
     when: keystone_db is changed
   - name: Run keystone bootstrap
     command: >
-      keystone-manage bootstrap --bootstrap-password {{ admin_pass }}
+      keystone-manage bootstrap --bootstrap-password {{ credentials['admin_pass'] }}
         --bootstrap-admin-url http://127.0.0.1:5000/v3/
         --bootstrap-internal-url http://127.0.0.1:5000/v3/
         --bootstrap-public-url http://127.0.0.1:5000/v3/
@@ -133,7 +146,7 @@
         --description "OpenStack Image" image
     environment:
       OS_USERNAME: admin
-      OS_PASSWORD: '{{ admin_pass }}'
+      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
       OS_PROJECT_NAME: admin
       OS_USER_DOMAIN_NAME: Default
       OS_PROJECT_DOMAIN_NAME: Default
@@ -146,7 +159,7 @@
         image public http://127.0.0.1:9292
     environment:
       OS_USERNAME: admin
-      OS_PASSWORD: '{{ admin_pass }}'
+      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
       OS_PROJECT_NAME: admin
       OS_USER_DOMAIN_NAME: Default
       OS_PROJECT_DOMAIN_NAME: Default
@@ -159,7 +172,7 @@
         image internal http://127.0.0.1:9292
     environment:
       OS_USERNAME: admin
-      OS_PASSWORD: '{{ admin_pass }}'
+      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
       OS_PROJECT_NAME: admin
       OS_USER_DOMAIN_NAME: Default
       OS_PROJECT_DOMAIN_NAME: Default
@@ -172,7 +185,7 @@
         image admin http://127.0.0.1:9292
     environment:
       OS_USERNAME: admin
-      OS_PASSWORD: '{{ admin_pass }}'
+      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
       OS_PROJECT_NAME: admin
       OS_USER_DOMAIN_NAME: Default
       OS_PROJECT_DOMAIN_NAME: Default

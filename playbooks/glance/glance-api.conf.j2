@@ -10,7 +10,7 @@ log_file=/var/log/glance/api.log
 log_dir=/var/log/glance
 enable_v1_api=False
 [database]
-connection=mysql+pymysql://glance:{{ glance_dbpass }}@127.0.0.1/glance
+connection=mysql+pymysql://glance:{{ credentials['glance_dbpass'] }}@127.0.0.1/glance
 [glance_store]
 stores=file
 default_store=file
@@ -22,7 +22,7 @@ auth_uri=http://127.0.0.1:5000/v3
 auth_type=password
 auth_url=http://127.0.0.1:5000
 username=admin
-password={{ admin_pass }}
+password={{ credentials['admin_pass'] }}
 user_domain_name=Default
 project_name=admin
 project_domain_name=Default
