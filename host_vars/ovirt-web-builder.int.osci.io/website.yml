@@ -1,5 +1,6 @@
 ---
-website_name: ovirt_web
+website_name: ovirt_web_jekyll
+website_builder: jekyll
 website_repo_url: https://github.com/oVirt/ovirt-site.git
 rsync_server: www.ovirt.org
 rsync_user: "{{ hostvars['www.ovirt.org']['websync_user'] }}"
