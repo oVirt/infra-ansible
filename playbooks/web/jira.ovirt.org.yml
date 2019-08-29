@@ -1,0 +1,17 @@
+---
+
+- hosts: www.ovirt.org
+  tasks:
+
+    - name: Create redirection for jira.ovirt.org
+      include_role:
+        name: httpd
+        tasks_from: vhost
+      vars:
+        website_domain: jira.ovirt.org
+        use_tls: True
+        use_letsencrypt: True
+        mail_domain: ovirt.org
+        force_tls: True
+        redirect: https://ovirt-jira.atlassian.net/
+

@@ -1,0 +1,52 @@
+---
+
+- hosts: web_builders
+  vars:
+    website_username: web_builder
+  roles:
+
+    - role: builder
+      builder_name: "{{ website_name }}"
+      builder: "{{ website_builder | default('middleman') }}"
+      builder_username: "{{ website_username }}"
+      git_url: "{{ website_repo_url }}"
+      git_version: master
+      cron_error_email: "{{ osas_builder_error_email }}"
+
+    - role: msmtp
+      smart_host: "{{ mail_forwarder }}"
+      disable_freeipa: true
+
+
+- hosts: www.ovirt.org
+  tasks:
+
+    - name: create web builder's user
+      user:
+        name: "{{ websync_user }}"
+        comment: "Web Builder User"
+
+    - name: "Create vhost for {{ inventory_hostname }}"
+      include_role:
+        name: httpd
+        tasks_from: vhost
+      vars:
+        website_domain: www.ovirt.org
+        server_aliases:
+          - ovirt.org
+        document_root: "{{ websync_path }}"
+        document_root_group: "{{ websync_user }}"
+        use_tls: True
+        use_letsencrypt: True
+        mail_domain: ovirt.org
+        force_tls: True
+        redirects:
+          - src: /stats
+            target: https://ovirt.biterg.io/
+          - src: "^/blog/(.*)\\.html"
+            target: "http://blogs.ovirt.org/$1/"
+            match: True
+          - src: "^/blog/(.*)"
+            target: "http://blogs.ovirt.org/$1"
+            match: True
+
