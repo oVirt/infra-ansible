@@ -134,6 +134,8 @@
           - jira
           - jenkins
         use_custom_favicon: True
+        # TODD: workaround Django vhost filtering not working well
+        multi_domains: false
       tags: ml_install_core
 
     - name: Configure web access to old ML archives
