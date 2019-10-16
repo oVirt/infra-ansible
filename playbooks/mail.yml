@@ -92,7 +92,6 @@
           hostmaster: root
           info: postmaster
           sales: postmaster
-          support: postmaster
           # trap decode to catch security attacks
           decode: root
           contact: "{{ ovirt_infra_ml_pv }}"
