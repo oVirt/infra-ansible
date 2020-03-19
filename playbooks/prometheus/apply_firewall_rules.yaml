@@ -1,0 +1,20 @@
+- name: Add firewall rules to allow access to node_exporter
+  hosts: nodes
+  gather_facts: false
+
+  tasks:
+  - name: add rules for exposing node_exporter metrics
+    iptables:
+      chain: OS_FIREWALL_ALLOW
+      action: append
+      protocol: tcp
+      ctstate: NEW
+      destination_port: 9100
+      jump: ACCEPT
+      source: 66.187.230.0/25,38.145.50.0/24
+      state: present
+    register: task_result
+
+  - name: save new rules
+    command: service iptables save
+    when: task_result.changed
