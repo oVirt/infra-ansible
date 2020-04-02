@@ -1,0 +1,13 @@
+---
+
+# these hosts only for now
+- hosts: mail.ovirt.org:www.ovirt.org
+  tasks:
+    - name: "Install Let's Encrypt renewal hook"
+      template:
+        src: "le/ovirt_cert_renewal_restart_services"
+        dest: /etc/letsencrypt/renewal-hooks/deploy/
+        owner: root
+        group: root
+        mode: 0755
+

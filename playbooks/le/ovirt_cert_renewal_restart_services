@@ -1,0 +1,13 @@
+#!/bin/bash
+# {{ ansible_managed }}
+set -e
+
+case $RENEWED_DOMAINS in
+    mx*|mail*)
+        systemctl reload postfix dovecot
+        ;;
+    *)
+        systemctl reload apache2
+        ;;
+esac
+
