@@ -9,8 +9,10 @@ echo ============================ Ansible version ===========================
 ansible --version
 echo ========================= Ansible-lint version =========================
 ansible-lint --version
-echo ============================ flake8 version ============================
+echo ============================ install flake8 ============================
+pip install --upgrade pip
 pip install flake8
+echo ============================ flake8 version ============================
 flake8 --version
 
 
