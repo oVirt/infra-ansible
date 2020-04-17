@@ -1,4 +1,4 @@
 ansible
 ansible-lint
-python2-pip
+python3-pip
 git

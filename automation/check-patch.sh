@@ -4,20 +4,25 @@
 
 set -o nounset -o errexit -o pipefail -o xtrace
 
+# for pip-install commands
+export PATH=~/.local/bin:$PATH
+
+echo ============================ Upgrade PIP ===========================
+python3 -m pip install --user --upgrade pip
+
 # check the tools's version, useful for debugging
 echo ============================ Ansible version ===========================
 ansible --version
 echo ========================= Ansible-lint version =========================
 ansible-lint --version
 echo ============================ install flake8 ============================
-pip install --upgrade pip
-pip install flake8
+python3 -m pip install --user flake8
 echo ============================ flake8 version ============================
 flake8 --version
 
 
 echo ============================= flake8 check =============================
-flake8 --exclude=plugins/strategy/mitogen_linear.py,$(find . -mindepth 2 -name ".git" -printf "%h,") --ignore=E126,E131,E501,E303 .
+flake8 --exclude=.local,plugins/strategy/mitogen_linear.py,$(find . -mindepth 2 -name ".git" -printf "%h,") --ignore=E126,E131,E501,E303 .
 
 echo ========================== Ansible-lint check ==========================
 ansible-lint -p --nocolor $(find . -mindepth 2 -name ".git" -printf "--exclude=%h ") playbooks/*.yml 
