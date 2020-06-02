@@ -40,19 +40,6 @@
         use_letsencrypt: True
         mail_domain: ovirt.org
         force_tls: True
-        redirects:
-          - src: /stats
-            target: https://ovirt.biterg.io/
-          - src: "^/blog/(.*)\\.html"
-            target: "http://blogs.ovirt.org/$1/"
-            match: True
-          - src: "^/blog/(.*)"
-            target: "http://blogs.ovirt.org/$1"
-            match: True
-          # make the old path still works as it is used in ML footers
-          - src: "^/site/privacy-policy/$$"
-            target: "https://www.ovirt.org/privacy-policy.html"
-            match: True
 
   tags: www.ovirt.org_vhost
 
