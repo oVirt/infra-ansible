@@ -102,6 +102,7 @@
           wordpress: community
           twitter: community
           identica: community
+          eventbrite: community
           ovirtbot: "{{ eedri_mail }}"
           kerri: "{{ kerri_mail }}"
           pr: "{{ ovirt_press_emails }}"
