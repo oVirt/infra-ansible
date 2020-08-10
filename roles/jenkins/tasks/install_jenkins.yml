@@ -1,0 +1,128 @@
+---
+- name: Download jenkins.repo
+  get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: Import Jenkins Key
+  rpm_key:
+    state: present
+    key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+- name: Install dependencies
+  package:
+    name:
+      - firewalld
+      - httpd
+
+- name: Install jenkins and java package
+  package:
+    name:
+      - java-11-openjdk-headless
+      - "{{ jenkins_version | default('jenkins') }}"
+  register: installation_result
+  notify: restart jenkins-service
+
+- name: ensure firewalld is running
+  service:
+    name: firewalld
+    state: started
+
+- name: "Create Jenkins vhost"
+  include_role:
+    name: httpd
+    tasks_from: vhost
+  vars:
+    reverse_proxy: http://127.0.0.1:8080/
+
+# Block asyncPeople
+- name: "Install vhost specific configuration"
+  template:
+    src: custom_vhost_config.conf
+    dest: "{{ _vhost_confdir }}/"
+    owner: root
+    group: "{{ httpd_usergroup }}"
+    mode: 0644
+  notify: reload httpd
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Start & Enable Jenkins
+  systemd:
+    name: jenkins
+    state: started
+    enabled: true
+
+- name: Check that the ansibleAdminPassword file exists
+  stat:
+    path: /var/lib/jenkins/secrets/ansibleAdminPassword
+  register: ansibleAdminPassword_file
+
+- name: Wait until the file /var/lib/jenkins/secrets/initialAdminPassword is present before continuing
+  wait_for:
+    path: /var/lib/jenkins/secrets/initialAdminPassword
+    timeout: 60
+  when: not ansibleAdminPassword_file.stat.exists
+
+- name: Get init password Jenkins
+  slurp:
+    src: /var/lib/jenkins/secrets/initialAdminPassword
+  register: initialAdminPassword
+
+- name: Print initial admin password
+  run_once: true
+  debug:
+    msg: "{{ initialAdminPassword['content'] | b64decode | trim }}"
+  when: not ansibleAdminPassword_file.stat.exists
+
+- name: Generate admin-user password string
+  shell: |
+    set -o pipefail
+    admin_password_file=/var/lib/jenkins/secrets/ansibleAdminPassword
+    gen_password=$(gpg --gen-random --armor 1 12)
+    echo "$gen_password" > "$admin_password_file"
+    chmod 500 "$admin_password_file"
+  become: yes
+  when: not ansibleAdminPassword_file.stat.exists
+
+- name: Get ansibleAdminPassword file content
+  slurp:
+    src: /var/lib/jenkins/secrets/ansibleAdminPassword
+  register: ansible_password_content
+
+- name: Setting ansible user password content into seperate variable
+  set_fact:
+    ansible_user_password: "{{ ansible_password_content['content'] | b64decode | trim }}"
+
+- name: Print ansible user password Jenkins
+  debug:
+    msg: "{{ ansible_user_password }}"
+
+- name: Wait untils Jenkins web API is available
+  uri:
+    url: "http://{{ inventory_hostname }}/api/"
+    status_code: 403
+  register: result_api
+  until: (result_api.status == 403)
+  retries: 10
+  delay: 30
+
+- name: unlock and add admin user for first time
+  jenkins_script:
+    script: |
+      import jenkins.model.*
+      import hudson.security.*
+      def instance = Jenkins.getInstance()
+      def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+      hudsonRealm.createAccount('ansible_admin', '${ansible_local_user_pwd}')
+      instance.setSecurityRealm(hudsonRealm)
+      def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+      strategy.setAllowAnonymousRead(false)
+      instance.setAuthorizationStrategy(strategy)
+      instance.save()
+    args:
+      ansible_local_user_pwd: "{{ ansible_user_password }}"
+    user: admin
+    password: "{{ initialAdminPassword['content'] | b64decode | trim }}"
+

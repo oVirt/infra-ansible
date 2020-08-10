@@ -1,0 +1,17 @@
+---
+- name: Istalling jenkins plugin using username and password
+  jenkins_plugin:
+    name: "{{ item.name | default(item) }}"
+    version: "{{ item.version | default(omit) }}"
+    url_username: ansible_admin
+    url_password: "{{ ansible_user_password }}"
+    url: "http://{{ inventory_hostname }}"
+    timeout: 90
+  with_items: "{{ jenkins_plugin_var }}"
+  when: ansible_user_password | default(false)
+  notify: restart jenkins-service
+  register: plugin_result
+  until: plugin_result is success
+  retries: 3
+  delay: 2
+

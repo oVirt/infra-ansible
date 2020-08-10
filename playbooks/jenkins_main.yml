@@ -1,0 +1,76 @@
+---
+- name: Install jenkins
+  hosts: jenkins_masters
+  gather_facts: true
+  become: true
+  handlers:
+    - name: regenerate CA trust
+      command: update-ca-trust
+    - name: reload httpd
+      service:
+        name: httpd
+        state: reloaded
+
+  tasks:
+    - name: "Install pre-generated TLS Certificate"
+      block:
+        - name: "Copy the ca certificate chain"
+          copy:
+            src: "web/jenkins/{{ inventory_hostname }}.ca.crt"
+            dest: /etc/pki/tls/certs/
+            owner: root
+            group: root
+            mode: 0644
+          notify: reload httpd
+        - name: "Copy the certificate"
+          copy:
+            src: "web/jenkins/{{ inventory_hostname }}.crt"
+            dest: /etc/pki/tls/certs/
+            owner: root
+            group: root
+            mode: 0644
+          notify: reload httpd
+        - name: "Copy the certificate key"
+          copy:
+            src: "web/jenkins/{{ inventory_hostname }}.key"
+            dest: /etc/pki/tls/private/
+            owner: root
+            group: root
+            mode: 0640
+          notify: reload httpd
+        - name: "Copy the CA certificate to trust store"
+          copy:
+            src: "web/jenkins/{{ inventory_hostname }}.ca.crt"
+            dest: /etc/pki/ca-trust/source/anchors
+            owner: root
+            group: root
+            mode: 0644
+          notify: regenerate CA trust
+      when: use_letsencrypt is not defined or not use_letsencrypt
+
+    # Installing jenkins and other packages
+    - name: Installing the Jenkins Server
+      include_role:
+        name: jenkins
+        tasks_from: install_jenkins
+        apply:
+          tags:
+            - jenkins
+            - jenkins_server
+      tags:
+        - jenkins
+        - jenkins_server
+
+    # To update and install configured plugins
+    - name: Install Jenkins Plugins
+      include_role:
+        name: jenkins
+        tasks_from: plugins
+        apply:
+          tags:
+            - jenkins
+            - jenkins_plugins
+      tags:
+        - jenkins
+        - jenkins_plugins
+
