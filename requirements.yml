@@ -17,8 +17,6 @@
   name: postgrey
 - src: git+https://gitlab.com/osas/ansible-role-postfix.git
   name: postfix
-- src: git+https://gitlab.com/osas/ansible-role-sasldb.git
-  name: sasldb
 - src: git+https://gitlab.com/osas/ansible-role-spamassassin.git
   name: spamassassin
 - src: git+https://gitlab.com/osas/ansible-role-dovecot.git
