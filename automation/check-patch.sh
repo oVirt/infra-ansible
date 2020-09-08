@@ -29,10 +29,10 @@ echo ============================= YAMLlint check ===========================
 yamllint .
 
 echo ============================= flake8 check =============================
-flake8 --exclude=.local,plugins/strategy/mitogen_linear.py,$(find . -mindepth 2 -name ".git" -printf "%h,") --ignore=E126,E131,E501,E303 .
+flake8 --exclude=.local,plugins/strategy/mitogen_linear.py,$(find . -mindepth 2 -name ".git" -printf "%h,") .
 
 echo ========================== Ansible-lint check ==========================
-ansible-lint -p --nocolor $(find . -mindepth 2 -name ".git" -printf "--exclude=%h ") playbooks/*.yml 
+ansible-lint -p --nocolor $(find . -mindepth 2 -name ".git" -printf "--exclude=%h ") playbooks/*.yml
 
 # YAMLlint and flake8 checks needs to be done before external roles are fetched
 # to be able to check internal roles too
