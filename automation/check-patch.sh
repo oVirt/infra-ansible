@@ -13,6 +13,10 @@ python3 -m pip install --user --upgrade pip
 # check the tools's version, useful for debugging
 echo ============================ Ansible version ===========================
 ansible --version
+echo ============================ install yamllint ============================
+python3 -m pip install --user yamllint
+echo ============================ YAMLlint version ==========================
+yamllint --version
 echo ========================= Ansible-lint version =========================
 ansible-lint --version
 echo ============================ install flake8 ============================
@@ -21,12 +25,17 @@ echo ============================ flake8 version ============================
 flake8 --version
 
 
+echo ============================= YAMLlint check ===========================
+yamllint .
+
 echo ============================= flake8 check =============================
 flake8 --exclude=.local,plugins/strategy/mitogen_linear.py,$(find . -mindepth 2 -name ".git" -printf "%h,") --ignore=E126,E131,E501,E303 .
 
 echo ========================== Ansible-lint check ==========================
 ansible-lint -p --nocolor $(find . -mindepth 2 -name ".git" -printf "--exclude=%h ") playbooks/*.yml 
 
+# YAMLlint and flake8 checks needs to be done before external roles are fetched
+# to be able to check internal roles too
 echo ======================== Ansible Galaxy install=========================
 ansible-galaxy install -r requirements.yml
 

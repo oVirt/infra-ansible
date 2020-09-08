@@ -248,7 +248,7 @@
           - mailman3
           - httpd
 
-    - name:  use the second disk for all Hyperkitty+Postorius data
+    - name: use the second disk for all Hyperkitty+Postorius data
       include_role:
         name: data_movebind
       vars:

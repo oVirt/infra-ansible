@@ -23,211 +23,211 @@
 
 - hosts: glance.ovirt.org
   tasks:
-  - name: Install OpenStack Stein release RPM on CentOS
-    package:
-      name: centos-release-openstack-pike
-      state: present
-    when:
-    - ansible_distribution == "CentOS"
-  - name: Install packages
-    package:
-      name:
-        - openstack-keystone
-        - httpd
-        - mod_wsgi
-        - openstack-glance
-        - python2-openstackclient
-        - mariadb-server
-        - policycoreutils-python
-        - MySQL-python
-      state: present
-  - name: Ensure MariaDB is running
-    service:
-      name: mariadb
-      state: started
-      enabled: yes
-  - name: Ensure credentials directory exists
-    file:
-      path: /root/credentials
-      state: directory
-      mode: 0700
-  - name: Initialize credentials
-    copy:
-      dest: /root/credentials/glance.yaml
-      content: |
-        keystone_dbpass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
-        glance_dbpass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
-        admin_pass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
-      owner: root
-      group: root
-      mode: 0600
-      force: no
-  - name: Fetch credentials
-    slurp:
-      src: /root/credentials/glance.yaml
-    register: credentials_encoded
-  - name: Extract credentials
-    set_fact:
-      credentials: "{{ credentials_encoded['content'] | b64decode | from_yaml }}"
-  - name: Create keystone database
-    mysql_db:
-      name: keystone
-      state: present
-    register: keystone_db
-  - name: Create keystone user
-    mysql_user:
-      name: keystone
-      password: "{{ credentials['keystone_dbpass'] }}"
-      host: localhost
-      append_privs: true
-      priv: keystone.*:ALL
-      state: present
-  - name: Create Glance database
-    mysql_db:
-      name: glance
-      state: present
-    register: glance_db
-  - name: Create glance user
-    mysql_user:
-      name: glance
-      password: "{{ credentials['glance_dbpass'] }}"
-      host: localhost
-      append_privs: true
-      priv: glance.*:ALL
-      state: present
-  - name: Define Keystone config
-    register: keystone_conf
-    template:
-      src: glance/keystone.conf.j2
-      dest: /etc/keystone/keystone.conf
-  - name: Define Glance API config
-    register: glance_api_conf
-    template:
-      src: glance/glance-api.conf.j2
-      dest: /etc/glance/glance-api.conf
-  - name: Define Glance Registry config
-    register: glance_registry_conf
-    template:
-      src: glance/glance-registry.conf.j2
-      dest: /etc/glance/glance-registry.conf
-  - name: Create admin_openrc
-    template:
-      src: glance/admin_openrc.j2
-      dest: /root/admin_openrc
-  - name: Create keystone HTTPD config symlink
-    file:
-      src: /usr/share/keystone/wsgi-keystone.conf
-      dest: /etc/httpd/conf.d/wsgi-keystone.conf
-      state: link
-    register: keystone_httpd_symlink
-  - name: Set httpd_use_openstack SELinux boolean
-    seboolean:
-      name: httpd_use_openstack
-      state: yes
-      persistent: yes
-  - name: Set httpd_can_network_connect_db SELinux boolean
-    seboolean:
-      name: httpd_can_network_connect_db
-      state: yes
-      persistent: yes
-  - name: Open Glance API port
-    firewalld:
-      port: 9292/tcp
-      permanent: yes
-      immediate: yes
-      state: enabled
-      zone: public
-  - name: Run keystone db_sync
-    command: keystone-manage db_sync
-    become: true
-    become_user: keystone
-    when: keystone_db is changed
-  - name: Run keystone fernet_setup
-    command: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
-    when: keystone_db is changed
-  - name: Run keystone credential_setup
-    command: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
-    when: keystone_db is changed
-  - name: Run keystone bootstrap
-    command: >
-      keystone-manage bootstrap --bootstrap-password {{ credentials['admin_pass'] }}
-        --bootstrap-admin-url http://127.0.0.1:5000/v3/
-        --bootstrap-internal-url http://127.0.0.1:5000/v3/
-        --bootstrap-public-url http://127.0.0.1:5000/v3/
-        --bootstrap-region-id RegionOne
-    when: keystone_db is changed
-  - name: Restart httpd if needed
-    service:
-      name: httpd
-      enabled: yes
-      state: restarted
-    when: keystone_conf is changed or keystone_httpd_symlink is changed or keystone_db is changed
-  - name: Define Glance service
-    command: >
-      openstack service create --name glance
-        --description "OpenStack Image" image
-    environment:
-      OS_USERNAME: admin
-      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
-      OS_PROJECT_NAME: admin
-      OS_USER_DOMAIN_NAME: Default
-      OS_PROJECT_DOMAIN_NAME: Default
-      OS_AUTH_URL: http://127.0.0.1:5000/v3
-      OS_IDENTITY_API_VERSION: 3
-    when: keystone_db is changed
-  - name: Create glance public endpoint
-    command: >
-      openstack endpoint create --region RegionOne
-        image public http://127.0.0.1:9292
-    environment:
-      OS_USERNAME: admin
-      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
-      OS_PROJECT_NAME: admin
-      OS_USER_DOMAIN_NAME: Default
-      OS_PROJECT_DOMAIN_NAME: Default
-      OS_AUTH_URL: http://127.0.0.1:5000/v3
-      OS_IDENTITY_API_VERSION: 3
-    when: keystone_db is changed
-  - name: Create glance internal endpoint
-    command: >
-      openstack endpoint create --region RegionOne
-        image internal http://127.0.0.1:9292
-    environment:
-      OS_USERNAME: admin
-      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
-      OS_PROJECT_NAME: admin
-      OS_USER_DOMAIN_NAME: Default
-      OS_PROJECT_DOMAIN_NAME: Default
-      OS_AUTH_URL: http://127.0.0.1:5000/v3
-      OS_IDENTITY_API_VERSION: 3
-    when: keystone_db is changed
-  - name: Create glance admin endpoint
-    command: >
-      openstack endpoint create --region RegionOne
-        image admin http://127.0.0.1:9292
-    environment:
-      OS_USERNAME: admin
-      OS_PASSWORD: "{{ credentials['admin_pass'] }}"
-      OS_PROJECT_NAME: admin
-      OS_USER_DOMAIN_NAME: Default
-      OS_PROJECT_DOMAIN_NAME: Default
-      OS_AUTH_URL: http://127.0.0.1:5000/v3
-      OS_IDENTITY_API_VERSION: 3
-    when: keystone_db is changed
-  - name: Run glance db_sync
-    command: glance-manage db_sync
-    become: true
-    become_user: glance
-    when: glance_db is changed
-  - name: Restart Glance API if needed
-    service:
-      name: openstack-glance-api
-      enabled: yes
-      state: restarted
-    when: glance_api_conf is changed or glance_db is changed
-  - name: restart Glance Registry if needed
-    service:
-      name: openstack-glance-registry
-      enabled: yes
-      state: restarted
-    when: glance_registry_conf is changed or glance_db is changed
+    - name: Install OpenStack Stein release RPM on CentOS
+      package:
+        name: centos-release-openstack-pike
+        state: present
+      when:
+        - ansible_distribution == "CentOS"
+    - name: Install packages
+      package:
+        name:
+          - openstack-keystone
+          - httpd
+          - mod_wsgi
+          - openstack-glance
+          - python2-openstackclient
+          - mariadb-server
+          - policycoreutils-python
+          - MySQL-python
+        state: present
+    - name: Ensure MariaDB is running
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+    - name: Ensure credentials directory exists
+      file:
+        path: /root/credentials
+        state: directory
+        mode: 0700
+    - name: Initialize credentials
+      copy:
+        dest: /root/credentials/glance.yaml
+        content: |
+          keystone_dbpass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
+          glance_dbpass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
+          admin_pass: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,numbers') }}"
+        owner: root
+        group: root
+        mode: 0600
+        force: no
+    - name: Fetch credentials
+      slurp:
+        src: /root/credentials/glance.yaml
+      register: credentials_encoded
+    - name: Extract credentials
+      set_fact:
+        credentials: "{{ credentials_encoded['content'] | b64decode | from_yaml }}"
+    - name: Create keystone database
+      mysql_db:
+        name: keystone
+        state: present
+      register: keystone_db
+    - name: Create keystone user
+      mysql_user:
+        name: keystone
+        password: "{{ credentials['keystone_dbpass'] }}"
+        host: localhost
+        append_privs: true
+        priv: keystone.*:ALL
+        state: present
+    - name: Create Glance database
+      mysql_db:
+        name: glance
+        state: present
+      register: glance_db
+    - name: Create glance user
+      mysql_user:
+        name: glance
+        password: "{{ credentials['glance_dbpass'] }}"
+        host: localhost
+        append_privs: true
+        priv: glance.*:ALL
+        state: present
+    - name: Define Keystone config
+      register: keystone_conf
+      template:
+        src: glance/keystone.conf.j2
+        dest: /etc/keystone/keystone.conf
+    - name: Define Glance API config
+      register: glance_api_conf
+      template:
+        src: glance/glance-api.conf.j2
+        dest: /etc/glance/glance-api.conf
+    - name: Define Glance Registry config
+      register: glance_registry_conf
+      template:
+        src: glance/glance-registry.conf.j2
+        dest: /etc/glance/glance-registry.conf
+    - name: Create admin_openrc
+      template:
+        src: glance/admin_openrc.j2
+        dest: /root/admin_openrc
+    - name: Create keystone HTTPD config symlink
+      file:
+        src: /usr/share/keystone/wsgi-keystone.conf
+        dest: /etc/httpd/conf.d/wsgi-keystone.conf
+        state: link
+      register: keystone_httpd_symlink
+    - name: Set httpd_use_openstack SELinux boolean
+      seboolean:
+        name: httpd_use_openstack
+        state: yes
+        persistent: yes
+    - name: Set httpd_can_network_connect_db SELinux boolean
+      seboolean:
+        name: httpd_can_network_connect_db
+        state: yes
+        persistent: yes
+    - name: Open Glance API port
+      firewalld:
+        port: 9292/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+        zone: public
+    - name: Run keystone db_sync
+      command: keystone-manage db_sync
+      become: true
+      become_user: keystone
+      when: keystone_db is changed
+    - name: Run keystone fernet_setup
+      command: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+      when: keystone_db is changed
+    - name: Run keystone credential_setup
+      command: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+      when: keystone_db is changed
+    - name: Run keystone bootstrap
+      command: >
+        keystone-manage bootstrap --bootstrap-password {{ credentials['admin_pass'] }}
+          --bootstrap-admin-url http://127.0.0.1:5000/v3/
+          --bootstrap-internal-url http://127.0.0.1:5000/v3/
+          --bootstrap-public-url http://127.0.0.1:5000/v3/
+          --bootstrap-region-id RegionOne
+      when: keystone_db is changed
+    - name: Restart httpd if needed
+      service:
+        name: httpd
+        enabled: yes
+        state: restarted
+      when: keystone_conf is changed or keystone_httpd_symlink is changed or keystone_db is changed
+    - name: Define Glance service
+      command: >
+        openstack service create --name glance
+          --description "OpenStack Image" image
+      environment:
+        OS_USERNAME: admin
+        OS_PASSWORD: "{{ credentials['admin_pass'] }}"
+        OS_PROJECT_NAME: admin
+        OS_USER_DOMAIN_NAME: Default
+        OS_PROJECT_DOMAIN_NAME: Default
+        OS_AUTH_URL: http://127.0.0.1:5000/v3
+        OS_IDENTITY_API_VERSION: 3
+      when: keystone_db is changed
+    - name: Create glance public endpoint
+      command: >
+        openstack endpoint create --region RegionOne
+          image public http://127.0.0.1:9292
+      environment:
+        OS_USERNAME: admin
+        OS_PASSWORD: "{{ credentials['admin_pass'] }}"
+        OS_PROJECT_NAME: admin
+        OS_USER_DOMAIN_NAME: Default
+        OS_PROJECT_DOMAIN_NAME: Default
+        OS_AUTH_URL: http://127.0.0.1:5000/v3
+        OS_IDENTITY_API_VERSION: 3
+      when: keystone_db is changed
+    - name: Create glance internal endpoint
+      command: >
+        openstack endpoint create --region RegionOne
+          image internal http://127.0.0.1:9292
+      environment:
+        OS_USERNAME: admin
+        OS_PASSWORD: "{{ credentials['admin_pass'] }}"
+        OS_PROJECT_NAME: admin
+        OS_USER_DOMAIN_NAME: Default
+        OS_PROJECT_DOMAIN_NAME: Default
+        OS_AUTH_URL: http://127.0.0.1:5000/v3
+        OS_IDENTITY_API_VERSION: 3
+      when: keystone_db is changed
+    - name: Create glance admin endpoint
+      command: >
+        openstack endpoint create --region RegionOne
+          image admin http://127.0.0.1:9292
+      environment:
+        OS_USERNAME: admin
+        OS_PASSWORD: "{{ credentials['admin_pass'] }}"
+        OS_PROJECT_NAME: admin
+        OS_USER_DOMAIN_NAME: Default
+        OS_PROJECT_DOMAIN_NAME: Default
+        OS_AUTH_URL: http://127.0.0.1:5000/v3
+        OS_IDENTITY_API_VERSION: 3
+      when: keystone_db is changed
+    - name: Run glance db_sync
+      command: glance-manage db_sync
+      become: true
+      become_user: glance
+      when: glance_db is changed
+    - name: Restart Glance API if needed
+      service:
+        name: openstack-glance-api
+        enabled: yes
+        state: restarted
+      when: glance_api_conf is changed or glance_db is changed
+    - name: restart Glance Registry if needed
+      service:
+        name: openstack-glance-registry
+        enabled: yes
+        state: restarted
+      when: glance_registry_conf is changed or glance_db is changed
