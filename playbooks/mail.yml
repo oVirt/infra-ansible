@@ -191,6 +191,9 @@
       copy:
         src: "mailing/sa_ovirt_mls.cf"
         dest: "{{ sa_config_bits }}/10_ovirt_mls.cf"
+        owner: root
+        group: root
+        mode: 0644
       notify: regenerate spamassassin configuration
 
     - name: Discard very-likely SPAM
@@ -222,6 +225,9 @@
       copy:
         src: mailing/users/
         dest: /etc/dovecot/users/
+        owner: root
+        group: dovecot-proxy
+        mode: 0640
 
     - name: Auto-expire Jenkins mailbox
       cron:

@@ -82,8 +82,13 @@
   stat: path=/etc/cloud/cloud.cfg.d
   register: cloud_init
 
-- name: Preserver AWS instance hostname
-  copy: dest=/etc/cloud/cloud.cfg.d/06_preserve_hostname.cfg src=06_preserve_hostname.cfg
+- name: Preserve AWS instance hostname
+  copy:
+    dest: /etc/cloud/cloud.cfg.d/06_preserve_hostname.cfg
+    src: 06_preserve_hostname.cfg
+    owner: root
+    group: root
+    mode: 0644
   when: cloud_init.stat.isdir is defined and cloud_init.stat.isdir
 
 - block:

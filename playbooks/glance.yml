@@ -100,20 +100,32 @@
       template:
         src: glance/keystone.conf.j2
         dest: /etc/keystone/keystone.conf
+        owner: root
+        group: keystone
+        mode: 0640
     - name: Define Glance API config
       register: glance_api_conf
       template:
         src: glance/glance-api.conf.j2
         dest: /etc/glance/glance-api.conf
+        owner: root
+        group: glance
+        mode: 0640
     - name: Define Glance Registry config
       register: glance_registry_conf
       template:
         src: glance/glance-registry.conf.j2
         dest: /etc/glance/glance-registry.conf
+        owner: root
+        group: glance
+        mode: 0640
     - name: Create admin_openrc
       template:
         src: glance/admin_openrc.j2
         dest: /root/admin_openrc
+        owner: root
+        group: root
+        mode: 0640
     - name: Create keystone HTTPD config symlink
       file:
         src: /usr/share/keystone/wsgi-keystone.conf
