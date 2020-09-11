@@ -43,3 +43,30 @@
 
   tags: www.ovirt.org_vhost
 
+# TODO: remove when resources.ovirt.org supports IPv6
+- hosts: www.ovirt.org
+  vars:
+    website_domain: mirrorlist.ovirt.org
+  tasks:
+
+    - name: "Create vhost for {{ website_domain }}"
+      include_role:
+        name: httpd
+        tasks_from: vhost
+      vars:
+        use_tls: True
+        use_letsencrypt: True
+        mail_domain: ovirt.org
+        force_tls: True
+
+    - name: "Install vhost specific configuration"
+      template:
+        src: "www.ovirt.org.conf"
+        dest: "{{ _vhost_confdir }}/custom.conf"
+        owner: root
+        group: "{{ httpd_usergroup }}"
+        mode: 0644
+      notify: reload httpd
+
+  tags: mirrorlist.ovirt.org_vhost
+
