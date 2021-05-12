@@ -33,9 +33,11 @@
   tags: dns
 
 # do not merge with next item, since epel need to be installed first
-- name: install Epel
-  package: pkg=epel-release state=present
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+- name: "Install Epel (CentOS)"
+  package:
+    name: epel-release
+    state: present
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int >= 7
 
 # cannot use 'yum copr' as yum-plugin-copr is missing on CentOS despite Copr's doc
 # also there is no Ansible module for it
@@ -52,6 +54,16 @@
     enabled: True
   when: ansible_os_family == 'RedHat'
   notify: Clean YUM Metadata
+
+# needed for needrestart at least
+- name: "Enable PowerTools RPM Repository"
+  # noqa risky-file-permissions
+  ini_file:
+    path: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
+    section: powertools
+    option: enabled
+    value: '1'
+  when: ansible_distribution_major_version|int >= 8 and (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat')
 
 # after all repos are setup and before installing packages
 - meta: flush_handlers
