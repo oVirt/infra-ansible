@@ -30,6 +30,7 @@
   when:
     - playbook_test_mode is not defined
     - ansible_os_family == 'RedHat'
+    - nameservers is defined
   tags: dns
 
 # do not merge with next item, since epel need to be installed first
