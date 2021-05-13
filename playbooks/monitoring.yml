@@ -3,7 +3,20 @@
 # TODO: Icinga installation
 
 - hosts: monitoring.ovirt.org
+  vars:
+    # shared in roles invocations
+    website_domain: "{{ inventory_hostname }}"
+
   tasks:
+    # nagios depends on php but we want to use php-fpm instead, thus we cannot remove the php package
+    # since the httpd role switch the MPM to 'event' the module is not loaded anymore in /etc/httpd/conf.modules.d/10-php.conf
+    # but the global config prevents httpd to start since the directives are not understood anymore
+    # therefore removing this useless file
+    - name: "Remove mod_php global config"
+      file:
+        path: /etc/httpd/conf.d/php.conf
+        state: absent
+
     # the nagios and pnp4nagios packages install server-wide config files
     # which define /nagios but unfortunately also prevent from having
     # Icinga only available in this vhost
@@ -12,7 +25,6 @@
         name: httpd
         tasks_from: vhost
       vars:
-        website_domain: "{{ inventory_hostname }}"
         use_tls: True
         use_letsencrypt: True
         mail_domain: ovirt.org
@@ -21,17 +33,24 @@
           - src: "^/$"
             target: /nagios
             match: True
-        # TODO: needed for mod_php, remove when PHP FPM support is ready
-        disable_modern_mpm: True
-    - name: Install PHP for the vhost
-      include_role:
-        name: httpd_php
+
+    - name: "Install PHP for the vhost"
+      import_role:
+        name: httpd_php_fpm
       vars:
-        disable_dangerous_functions: True
         extra_open_paths:
           - /usr/share/nagios/html
           - /etc/nagios
           - /etc/pnp4nagios
           - /var/lib/pnp4nagios
           - /usr/bin/rrdtool
+          # graphs need this
+          - /tmp
+        # the nagios package enforce using the httpd user to read the configuration
+        php_pool_user: "{{ httpd_usergroup }}"
+        php_pool_group: "{{ httpd_usergroup }}"
+        create_user: False
+        php_config_values:
+          # proc_open is needed for rgaphs
+          disable_functions: "exec,passthru,shell_exec,system,popen,curl_exec,curl_multi_exec,show_source,set_time_limit"
 
