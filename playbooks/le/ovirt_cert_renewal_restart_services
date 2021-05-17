@@ -3,7 +3,7 @@
 set -e
 
 case $RENEWED_DOMAINS in
-    mx*|mail*|lists*)
+    *mx*|*mail*|*lists*)
         # also reload httpd as we use a shared cert
         systemctl reload postfix dovecot httpd
         ;;
