@@ -17,7 +17,6 @@ roles/postgresql
 roles/mailman3
 roles/httpd
 roles/httpd_php_fpm
-roles/tor
 roles/postgrey
 roles/postfix
 roles/guest_virt_tools
