@@ -119,6 +119,8 @@
           # email used by Zuul, we don't need the replies
           zuul: /dev/null
         use_simple_tls: True
+        with_dovecot: True
+        with_pop3: true
         # social_auth is defined in host_vars
         # caught by underlying 'mailman3' role
         with_fedora_auth: True
@@ -209,17 +211,6 @@
 
 - hosts: mail.ovirt.org
   tasks:
-
-    - name: Install POP3 Server
-      include_role:
-        name: dovecot
-      vars:
-        with_pop3: true
-        # inherit TLS settings from 'mailing-lists-server' role
-        auth: yaml-dict
-        cert_file: "/etc/letsencrypt/live/lists.ovirt.org/fullchain.pem"
-        key_file: "/etc/letsencrypt/live/lists.ovirt.org/privkey.pem"
-        ca_file: /etc/pki/tls/cert.pem
 
     - name: install Dovecot users
       copy:
