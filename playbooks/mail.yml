@@ -150,22 +150,26 @@
         mode: 0644
       notify: reload httpd
 
-    # needed for the 'synchronize' module
-    - name: "Install rsync"
-      package:
-        name: rsync
-        state: present
+    - name: "Create Mail Templates directories"
+      file:
+        path: "/var/lib/mailman3/templates/{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+      loop:
+        - site/en
 
     - name: "Install Mail Templates"
-      synchronize:
-        src: "mailing/mail_templates/{{ item }}/"
-        dest: "/var/lib/mailman3/templates/{{ item }}/"
-        owner: no
-        group: no
-        delete: yes
+      copy:
+        src: "mailing/mail_templates/{{ item }}"
+        dest: "/var/lib/mailman3/templates/{{ item }}"
+        owner: root
+        group: root
+        mode: 0644
       loop:
-        - site
-      notify: restart mailman3
+        - "site/en/list:member:regular:footer.txt"
+        - "site/en/list:member:digest:footer.txt"
 
     - name: Install custom favicon
       copy:
