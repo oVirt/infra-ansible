@@ -56,15 +56,30 @@
   when: ansible_os_family == 'RedHat'
   notify: Clean YUM Metadata
 
-# needed for needrestart at least
-- name: "Enable PowerTools RPM Repository"
-  # noqa risky-file-permissions
-  ini_file:
-    path: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
-    section: powertools
-    option: enabled
-    value: '1'
-  when: ansible_distribution_major_version|int >= 8 and (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat')
+- name: "Enable Extra RPM Repository"
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int >= 8
+  block:
+    - name: "Test if certain repository config exist"
+      stat:
+        path: "/etc/yum.repos.d/{{ item }}.repo"
+      loop:
+        - CentOS-Linux-PowerTools
+        - CentOS-Stream-PowerTools
+      register: yum_repo_files
+
+    # needed for needrestart at least
+    - name: "Enable PowerTools RPM Repository"
+      # noqa risky-file-permissions
+      ini_file:
+        path: "/etc/yum.repos.d/{{ item.item }}.repo"
+        section: powertools
+        option: enabled
+        value: '1'
+        create: no
+      when: item.stat.exists
+      loop: "{{ yum_repo_files.results }}"
+      loop_control:
+        label: "{{ item.item }}"
 
 # after all repos are setup and before installing packages
 - meta: flush_handlers
