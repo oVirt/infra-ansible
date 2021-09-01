@@ -3,89 +3,90 @@
 jenkins_plugin_var:
   - { name: 'Parameterized-Remote-Trigger', version: '3.1.5.1' }
   - { name: 'ace-editor', version: '1.1' }
-  - { name: 'analysis-model-api', version: '10.2.5' }
+  - { name: 'analysis-model-api', version: '10.3.0' }
   - { name: 'ansicolor', version: '1.0.0' }
   - { name: 'ant', version: '1.11' }
   - { name: 'antisamy-markup-formatter', version: '2.1' }
   - { name: 'apache-httpcomponents-client-4-api', version: '4.5.13-1.0' }
-  - { name: 'audit-trail', version: '3.8' }
+  - { name: 'audit-trail', version: '3.10' }
   - { name: 'authentication-tokens', version: '1.4' }
   - { name: 'badge', version: '1.8' }
-  - { name: 'blueocean', version: '1.24.7' }
+  - { name: 'blueocean', version: '1.24.8' }
   - { name: 'blueocean-autofavorite', version: '1.2.4' }
-  - { name: 'blueocean-bitbucket-pipeline', version: '1.24.7' }
-  - { name: 'blueocean-commons', version: '1.24.7' }
-  - { name: 'blueocean-config', version: '1.24.7' }
-  - { name: 'blueocean-core-js', version: '1.24.7' }
-  - { name: 'blueocean-dashboard', version: '1.24.7' }
+  - { name: 'blueocean-bitbucket-pipeline', version: '1.24.8' }
+  - { name: 'blueocean-commons', version: '1.24.8' }
+  - { name: 'blueocean-config', version: '1.24.8' }
+  - { name: 'blueocean-core-js', version: '1.24.8' }
+  - { name: 'blueocean-dashboard', version: '1.24.8' }
   - { name: 'blueocean-display-url', version: '2.4.1' }
-  - { name: 'blueocean-events', version: '1.24.7' }
-  - { name: 'blueocean-git-pipeline', version: '1.24.7' }
-  - { name: 'blueocean-github-pipeline', version: '1.24.7' }
-  - { name: 'blueocean-i18n', version: '1.24.7' }
-  - { name: 'blueocean-jwt', version: '1.24.7' }
-  - { name: 'blueocean-personalization', version: '1.24.7' }
-  - { name: 'blueocean-pipeline-api-impl', version: '1.24.7' }
-  - { name: 'blueocean-pipeline-editor', version: '1.24.7' }
-  - { name: 'blueocean-pipeline-scm-api', version: '1.24.7' }
-  - { name: 'blueocean-rest', version: '1.24.7' }
-  - { name: 'blueocean-rest-impl', version: '1.24.7' }
-  - { name: 'blueocean-web', version: '1.24.7' }
+  - { name: 'blueocean-events', version: '1.24.8' }
+  - { name: 'blueocean-git-pipeline', version: '1.24.8' }
+  - { name: 'blueocean-github-pipeline', version: '1.24.8' }
+  - { name: 'blueocean-i18n', version: '1.24.8' }
+  - { name: 'blueocean-jwt', version: '1.24.8' }
+  - { name: 'blueocean-personalization', version: '1.24.8' }
+  - { name: 'blueocean-pipeline-api-impl', version: '1.24.8' }
+  - { name: 'blueocean-pipeline-editor', version: '1.24.8' }
+  - { name: 'blueocean-pipeline-scm-api', version: '1.24.8' }
+  - { name: 'blueocean-rest', version: '1.24.8' }
+  - { name: 'blueocean-rest-impl', version: '1.24.8' }
+  - { name: 'blueocean-web', version: '1.24.8' }
   - { name: 'bootstrap4-api', version: '4.6.0-3' }
-  - { name: 'bouncycastle-api', version: '2.20' }
-  - { name: 'branch-api', version: '2.6.4' }
+  - { name: 'bootstrap5-api', version: '5.1.0-3' }
+  - { name: 'bouncycastle-api', version: '2.24' }
+  - { name: 'branch-api', version: '2.6.5' }
   - { name: 'bugzilla', version: '1.5' }
   - { name: 'build-timeout', version: '1.20' }
   - { name: 'bulk-builder', version: '1.5' }
-  - { name: 'caffeine-api', version: '2.9.1-23.v51c4e2c879c8' }
-  - { name: 'checks-api', version: '1.7.0' }
+  - { name: 'caffeine-api', version: '2.9.2-29.v717aac953ff3' }
+  - { name: 'checks-api', version: '1.7.2' }
   - { name: 'cloud-stats', version: '0.27' }
-  - { name: 'cloudbees-bitbucket-branch-source', version: '2.9.9' }
+  - { name: 'cloudbees-bitbucket-branch-source', version: '2.9.11' }
   - { name: 'cloudbees-disk-usage-simple', version: '0.10' }
-  - { name: 'cloudbees-folder', version: '6.15' }
+  - { name: 'cloudbees-folder', version: '6.16' }
   - { name: 'command-launcher', version: '1.6' }
   - { name: 'compact-columns', version: '1.13' }
   - { name: 'conditional-buildstep', version: '1.4.1' }
-  - { name: 'config-file-provider', version: '3.8.0' }
-  - { name: 'configuration-as-code', version: '1.51' }
+  - { name: 'config-file-provider', version: '3.8.1' }
+  - { name: 'configuration-as-code', version: '1.52' }
   - { name: 'configurationslicing', version: '1.52' }
   - { name: 'copr', version: '0.6.1' }
   - { name: 'copyartifact', version: '1.46.1' }
   - { name: 'credentials', version: '2.5' }
-  - { name: 'credentials-binding', version: '1.25' }
+  - { name: 'credentials-binding', version: '1.27' }
   - { name: 'cron_column', version: '1.4' }
   - { name: 'dashboard-view', version: '2.17' }
-  - { name: 'data-tables-api', version: '1.10.23-3' }
+  - { name: 'data-tables-api', version: '1.10.25-3' }
   - { name: 'discard-old-build', version: '1.05' }
   - { name: 'display-url-api', version: '2.3.5' }
   - { name: 'docker-build-publish', version: '1.3.3' }
   - { name: 'docker-commons', version: '1.17' }
   - { name: 'docker-workflow', version: '1.26' }
-  - { name: 'durable-task', version: '1.37' }
-  - { name: 'echarts-api', version: '5.1.0-2' }
+  - { name: 'durable-task', version: '1.39' }
+  - { name: 'echarts-api', version: '5.1.2-11' }
   - { name: 'email-ext', version: '2.83' }
   - { name: 'embeddable-build-status', version: '2.0.3' }
   - { name: 'envinject', version: '2.4.0' }
   - { name: 'envinject-api', version: '1.7' }
   - { name: 'extended-read-permission', version: '3.2' }
   - { name: 'external-monitor-job', version: '1.7' }
-  - { name: 'extra-columns', version: '1.23' }
+  - { name: 'extra-columns', version: '1.24' }
   - { name: 'favorite', version: '2.3.3' }
   - { name: 'flexible-publish', version: '0.16.1' }
-  - { name: 'font-awesome-api', version: '5.15.3-2' }
-  - { name: 'forensics-api', version: '1.0.0' }
-  - { name: 'generic-webhook-trigger', version: '1.72' }
+  - { name: 'font-awesome-api', version: '5.15.4-1' }
+  - { name: 'forensics-api', version: '1.3.0' }
+  - { name: 'generic-webhook-trigger', version: '1.76' }
   - { name: 'gerrit-trigger', version: '2.34.0' }
   - { name: 'ghprb', version: '1.42.2' }
-  - { name: 'git', version: '4.7.2' }
-  - { name: 'git-client', version: '3.7.2' }
-  - { name: 'git-server', version: '1.9' }
-  - { name: 'github', version: '1.33.1' }
+  - { name: 'git', version: '4.8.2' }
+  - { name: 'git-client', version: '3.9.0' }
+  - { name: 'git-server', version: '1.10' }
+  - { name: 'github', version: '1.34.0' }
   - { name: 'github-api', version: '1.123' }
-  - { name: 'github-branch-source', version: '2.11.1' }
+  - { name: 'github-branch-source', version: '2.11.2' }
   - { name: 'global-build-stats', version: '1.5' }
   - { name: 'google-login', version: '1.6' }
-  - { name: 'google-oauth-plugin', version: '1.0.5' }
+  - { name: 'google-oauth-plugin', version: '1.0.6' }
   - { name: 'greenballs', version: '1.15.1' }
   - { name: 'groovy', version: '2.4' }
   - { name: 'groovy-events-listener-plugin', version: '1.014' }
@@ -93,65 +94,66 @@ jenkins_plugin_var:
   - { name: 'handlebars', version: '3.0.8' }
   - { name: 'handy-uri-templates-2-api', version: '2.1.8-1.0' }
   - { name: 'htmlpublisher', version: '1.25' }
-  - { name: 'jackson2-api', version: '2.12.3' }
+  - { name: 'jackson2-api', version: '2.12.4' }
   - { name: 'javadoc', version: '1.6' }
   - { name: 'jaxb', version: '2.3.0.1' }
   - { name: 'jdk-tool', version: '1.5' }
-  - { name: 'jenkins-design-language', version: '1.24.7' }
+  - { name: 'jenkins-design-language', version: '1.24.8' }
   - { name: 'jjwt-api', version: '0.11.2-9.c8b45b8bb173' }
-  - { name: 'jobConfigHistory', version: '2.27' }
+  - { name: 'jobConfigHistory', version: '2.28.1' }
   - { name: 'jquery', version: '1.12.4-1' }
   - { name: 'jquery-detached', version: '1.2.1' }
-  - { name: 'jquery3-api', version: '3.6.0-1' }
+  - { name: 'jquery3-api', version: '3.6.0-2' }
   - { name: 'jsch', version: '0.1.55.2' }
-  - { name: 'junit', version: '1.50' }
-  - { name: 'kubernetes', version: '1.29.6' }
-  - { name: 'kubernetes-client-api', version: '4.13.3-1' }
+  - { name: 'junit', version: '1.52' }
+  - { name: 'kubernetes', version: '1.30.1' }
+  - { name: 'kubernetes-client-api', version: '5.4.1' }
   - { name: 'kubernetes-credentials', version: '0.9.0' }
   - { name: 'ldap', version: '2.7' }
   - { name: 'linenumbers', version: '1.2' }
   - { name: 'lockable-resources', version: '2.11' }
   - { name: 'mailer', version: '1.34' }
   - { name: 'mask-passwords', version: '3.0' }
-  - { name: 'matrix-auth', version: '2.6.7' }
+  - { name: 'matrix-auth', version: '2.6.8' }
   - { name: 'matrix-project', version: '1.19' }
   - { name: 'matrix-reloaded', version: '1.1.3' }
-  - { name: 'maven-plugin', version: '3.11' }
-  - { name: 'metrics', version: '4.0.2.7' }
+  - { name: 'maven-plugin', version: '3.12' }
+  - { name: 'metrics', version: '4.0.2.8' }
   - { name: 'momentjs', version: '1.1.1' }
-  - { name: 'monitoring', version: '1.87.0' }
+  - { name: 'monitoring', version: '1.88.0' }
   - { name: 'multi-slave-config-plugin', version: '1.2.0' }
   - { name: 'multiple-scms', version: '0.8' }
   - { name: 'naginator', version: '1.18.1' }
-  - { name: 'nested-view', version: '1.19' }
-  - { name: 'nodelabelparameter', version: '1.8.1' }
+  - { name: 'nested-view', version: '1.21' }
+  - { name: 'nodelabelparameter', version: '1.9.0' }
   - { name: 'nodenamecolumn', version: '1.2' }
-  - { name: 'notification', version: '1.14' }
+  - { name: 'notification', version: '1.15' }
   - { name: 'oauth-credentials', version: '0.4' }
   - { name: 'okhttp-api', version: '3.14.9' }
-  - { name: 'openshift-client', version: '1.0.34' }
+  - { name: 'openshift-client', version: '1.0.35' }
   - { name: 'openshift-pipeline', version: '1.0.57' }
-  - { name: 'openshift-sync', version: '1.0.46' }
-  - { name: 'openstack-cloud', version: '2.58' }
+  - { name: 'openshift-sync', version: '1.0.50' }
+  - { name: 'openstack-cloud', version: '2.60' }
   - { name: 'pam-auth', version: '1.6' }
-  - { name: 'parameterized-trigger', version: '2.40' }
-  - { name: 'pipeline-build-step', version: '2.13' }
+  - { name: 'parameterized-trigger', version: '2.41' }
+  - { name: 'pipeline-build-step', version: '2.15' }
   - { name: 'pipeline-github-lib', version: '1.0' }
   - { name: 'pipeline-githubnotify-step', version: '1.0.5' }
   - { name: 'pipeline-graph-analysis', version: '1.11' }
   - { name: 'pipeline-input-step', version: '2.12' }
   - { name: 'pipeline-milestone-step', version: '1.3.2' }
-  - { name: 'pipeline-model-api', version: '1.8.5' }
-  - { name: 'pipeline-model-definition', version: '1.8.5' }
-  - { name: 'pipeline-model-extensions', version: '1.8.5' }
+  - { name: 'pipeline-model-api', version: '1.9.1' }
+  - { name: 'pipeline-model-definition', version: '1.9.1' }
+  - { name: 'pipeline-model-extensions', version: '1.9.1' }
   - { name: 'pipeline-rest-api', version: '2.19' }
   - { name: 'pipeline-stage-step', version: '2.5' }
-  - { name: 'pipeline-stage-tags-metadata', version: '1.8.5' }
+  - { name: 'pipeline-stage-tags-metadata', version: '1.9.1' }
   - { name: 'pipeline-stage-view', version: '2.19' }
-  - { name: 'pipeline-utility-steps', version: '2.8.0' }
+  - { name: 'pipeline-utility-steps', version: '2.9.0' }
   - { name: 'plain-credentials', version: '1.7' }
-  - { name: 'plugin-util-api', version: '2.2.0' }
+  - { name: 'plugin-util-api', version: '2.4.0' }
   - { name: 'popper-api', version: '1.16.1-2' }
+  - { name: 'popper2-api', version: '2.9.3-1' }
   - { name: 'postbuild-task', version: '1.9' }
   - { name: 'preSCMbuildstep', version: '0.3' }
   - { name: 'progress-bar-column-plugin', version: '1.0' }
@@ -159,44 +161,43 @@ jenkins_plugin_var:
   - { name: 'promoted-builds', version: '3.10' }
   - { name: 'publish-over', version: '0.22' }
   - { name: 'publish-over-ssh', version: '1.22' }
-  - { name: 'pubsub-light', version: '1.14' }
+  - { name: 'pubsub-light', version: '1.16' }
   - { name: 'purge-build-queue-plugin', version: '1.0' }
   - { name: 'rebuild', version: '1.32' }
-  - { name: 'resource-disposer', version: '0.15' }
-  - { name: 'role-strategy', version: '3.1.1' }
+  - { name: 'resource-disposer', version: '0.16' }
+  - { name: 'role-strategy', version: '3.2.0' }
   - { name: 'run-condition', version: '1.5' }
-  - { name: 'scm-api', version: '2.6.4' }
-  - { name: 'script-security', version: '1.77' }
-  - { name: 'simple-theme-plugin', version: '0.6' }
-  - { name: 'snakeyaml-api', version: '1.27.0' }
+  - { name: 'scm-api', version: '2.6.5' }
+  - { name: 'script-security', version: '1.78' }
+  - { name: 'simple-theme-plugin', version: '0.7' }
+  - { name: 'snakeyaml-api', version: '1.29.1' }
   - { name: 'sse-gateway', version: '1.24' }
   - { name: 'ssh', version: '2.6.1' }
-  - { name: 'ssh-agent', version: '1.22' }
+  - { name: 'ssh-agent', version: '1.23' }
   - { name: 'ssh-credentials', version: '1.19' }
-  - { name: 'ssh-slaves', version: '1.32.0' }
-  - { name: 'sshd', version: '3.0.3' }
+  - { name: 'ssh-slaves', version: '1.33.0' }
+  - { name: 'sshd', version: '3.1.0' }
   - { name: 'structs', version: '1.23' }
-  - { name: 'swarm', version: '3.27' }
+  - { name: 'swarm', version: '3.28' }
   - { name: 'test-results-analyzer', version: '0.3.5' }
-  - { name: 'throttle-concurrents', version: '2.2' }
+  - { name: 'throttle-concurrents', version: '2.4' }
   - { name: 'timestamper', version: '1.13' }
-  - { name: 'token-macro', version: '2.15' }
+  - { name: 'token-macro', version: '266.v44a80cf277fd' }
   - { name: 'trilead-api', version: '1.0.13' }
   - { name: 'variant', version: '1.4' }
   - { name: 'view-job-filters', version: '2.3' }
-  - { name: 'warnings-ng', version: '9.1.0' }
+  - { name: 'warnings-ng', version: '9.5.0' }
   - { name: 'whitesource', version: '21.1.2' }
   - { name: 'windows-slaves', version: '1.8' }
   - { name: 'workflow-aggregator', version: '2.6' }
-  - { name: 'workflow-api', version: '2.44' }
-  - { name: 'workflow-basic-steps', version: '2.23' }
-  - { name: 'workflow-cps', version: '2.92' }
-  - { name: 'workflow-cps-global-lib', version: '2.19' }
+  - { name: 'workflow-api', version: '2.46' }
+  - { name: 'workflow-basic-steps', version: '2.24' }
+  - { name: 'workflow-cps', version: '2.93' }
+  - { name: 'workflow-cps-global-lib', version: '2.21' }
   - { name: 'workflow-durable-task-step', version: '2.39' }
   - { name: 'workflow-job', version: '2.41' }
-  - { name: 'workflow-multibranch', version: '2.24' }
-  - { name: 'workflow-scm-step', version: '2.12' }
-  - { name: 'workflow-step-api', version: '2.23' }
+  - { name: 'workflow-multibranch', version: '2.26' }
+  - { name: 'workflow-scm-step', version: '2.13' }
+  - { name: 'workflow-step-api', version: '2.24' }
   - { name: 'workflow-support', version: '3.8' }
   - { name: 'ws-cleanup', version: '0.39' }
-
