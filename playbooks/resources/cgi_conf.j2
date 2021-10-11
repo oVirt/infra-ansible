@@ -1,0 +1,11 @@
+  <Directory "{{ mirrorlist_dir }}">
+    Options +ExecCGI
+    AllowOverride None
+    Require all granted
+    <FilesMatch ".+(\.cgi)$">
+        SetHandler cgi-script
+    </FilesMatch>
+  </Directory>
+
+  RewriteEngine On
+  RewriteRule ^/pub/yum-repo/(mirrorlist-ovirt-.*)$  /pub/yum-repo/mirrors.cgi?$1

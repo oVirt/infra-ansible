@@ -1,0 +1,124 @@
+---
+
+- hosts: resources
+  tasks:
+
+    - name: "Create vhost for {{ inventory_hostname }}"
+      include_role:
+        name: httpd
+        tasks_from: vhost
+      vars:
+        website_domain: "{{ resources_webname | default(inventory_hostname) }}"
+        document_root: "{{ resources_dir }}"
+        use_tls: True
+        use_letsencrypt: True
+        force_tls: True
+
+    - name: "Install vhost specific configuration (mirrors)"
+      template:
+        src: "resources/cgi_conf.j2"
+        dest: "{{ _vhost_confdir }}/mirrors_cgi.conf"
+        owner: root
+        group: "{{ httpd_usergroup }}"
+        mode: 0644
+      notify: reload httpd
+
+    - name: "Install vhost specific configuration (indexes)"
+      template:
+        src: "resources/indexes.j2"
+        dest: "{{ _vhost_confdir }}/indexes.conf"
+        owner: root
+        group: "{{ httpd_usergroup }}"
+        mode: 0644
+      notify: reload httpd
+
+    - name: create user
+      user:
+        name: "{{ mirror_user }}"
+        state: present
+      become: yes
+
+    # Till all mirror configs updated to use $resources_dir we need to keep this
+    - name: create link
+      file:
+        dest: "{{ mirror_path }}"
+        src: "{{ resources_dir }}"
+        state: link
+        force: yes
+      become: yes
+
+    - name: "create {{ rsynclog_bin_path }} dir"
+      file:
+        path: "{{ rsynclog_bin_path }}"
+        state: directory
+        owner: "{{ mirror_user }}"
+        group: "{{ mirror_user }}"
+        mode: 0775
+        recurse: yes
+      become: yes
+
+    - name: "create {{ rsynclog_log_path }} dir"
+      file:
+        path: "{{ rsynclog_log_path }}"
+        state: directory
+        owner: "{{ mirror_user }}"
+        group: "{{ mirror_user }}"
+        mode: 0775
+      become: yes
+
+    - name: install rsync
+      yum:
+        name: rsync
+        state: installed
+      become: yes
+
+    - name: "create {{ rsynclog }}"
+      template:
+        dest: "{{ rsynclog }}"
+        owner: "{{ mirror_user }}"
+        group: "{{ mirror_user }}"
+        src: resources/rsynclog.j2
+        mode: 0775
+      become: yes
+
+    - name: "create {{ mirrorlist_dir }} dir"
+      file:
+        path: "{{ mirrorlist_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+      become: yes
+
+    - name: "create {{ mirrorlist_file }}"
+      copy:
+        dest: "{{ mirrorlist_file }}"
+        owner: root
+        group: root
+        src: resources/mirrorlist
+        remote_src: false
+        mode: 0644
+      become: yes
+
+    - name: ssh keys
+      authorized_key:
+        user: '{{ mirror_user }}'
+        state: present
+        comment: "{{ user.value.comment }}"
+        key: "{{ user.value.ssh_key }}"
+        key_options: "{{ ssh_key_options | join(',') }}"
+      become: yes
+      loop: "{{ ssh_key_users | dict2items }}"
+      loop_control:
+        loop_var: user
+        label: "{{ user.value }}"
+
+    - name: "create mirror scripts"
+      template:
+        dest: "{{ mirrorlist_dir }}/mirrors.cgi"
+        owner: "{{ mirror_user }}"
+        group: "{{ mirror_user }}"
+        src: resources/mirrors_cgi.j2
+        mode: 0775
+      become: yes
+

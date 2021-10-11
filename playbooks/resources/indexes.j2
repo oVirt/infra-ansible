@@ -1,0 +1,19 @@
+  <Directory "/srv/resources/">
+    Options +Indexes +FollowSymLinks +MultiViews
+    AllowOverride None
+    Require all granted
+    DirectoryIndex index.html
+  </Directory>
+
+  #override /etc/httpd/conf.d/welcome.conf
+  <LocationMatch "^/+$">
+    Options +Indexes +FollowSymLinks +MultiViews
+  </LocationMatch>
+
+  <Directory "{{ resources_dir }}">
+    Options +Indexes +FollowSymLinks +MultiViews
+    AllowOverride None
+    Require all granted
+    DirectoryIndex index.html
+  </Directory>
+

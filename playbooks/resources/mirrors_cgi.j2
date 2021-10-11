@@ -1,0 +1,35 @@
+#!/bin/bash
+echo "Content-type: text/plain"
+echo ""
+echo "# Generated on $(date)"
+repo_name="${QUERY_STRING%%&*}"
+dist="${repo_name##*-}"
+repo_name="${repo_name%-*}"
+version="${repo_name#mirrorlist-ovirt-}"
+list="$(sed \
+    -e "s/@VERSION@/$version/g" \
+    -e "s/@DIST@/$dist/g" \
+    ${0%/*}/mirrorlist \
+    | grep -v "^#"
+)"
+
+local_repo="$(echo "$list" | grep resources.ovirt.org | head -n1)"
+local_repo="${local_repo#*resources.ovirt.org/}"
+! [[ $QUERY_STRING  =~ ^mirrorlist-ovirt-.*$ ]] \
+|| ! [[ -d {{ resources_dir }}/$local_repo ]] \
+&& {
+    echo "# Mirrorlist "$QUERY_STRING" not available, make sure it's in the form mirrorlist-ovirt-\${version}-\${distribution}."
+    echo "# And that is one of:"
+    shopt -s nullglob
+    for repo in {{ resources_dir }}/pub/*/rpm/{fc,el}*;  do
+        repo_name=${repo///var\/www\/html\/pub\/}
+        [[ $repo_name =~ ^ovirt- ]] || continue
+        repo_name="${repo_name#*-}"
+        version="${repo_name%%/*}"
+        dist="${repo_name##*/}"
+        echo "# mirrorlist-ovirt-$version-$dist"
+    done
+    exit 0
+}
+echo "$list"
+exit 0

@@ -1,0 +1,12 @@
+---
+mirror_user: 'mirror'
+resources_dir: '/srv/resources/'
+resources_block_dev: '/dev/mapper/resources_lvm-data'
+incoming_dir: '/home/jenkins/artifacts'
+
+mirror_path: /var/www/html
+rsynclog_bin_path: '/home/{{ mirror_user }}/bin'
+rsynclog_log_path: '/var/log/mirrors'
+rsynclog: '{{ rsynclog_bin_path }}/rsynclog'
+mirrorlist_dir: '{{ resources_dir }}/pub/yum-repo'
+mirrorlist_file: '{{ mirrorlist_dir }}/mirrorlist'
