@@ -132,6 +132,8 @@
         myorigin: "{{ ovirt_domain }}"
         mynetworks:
           - 66.187.230.42
+          - 169.62.7.160/27
+          - 2607:f0d0:3a01:121::/64
         local_accounts:
           - jira
           - jenkins
