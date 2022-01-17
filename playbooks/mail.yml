@@ -78,10 +78,9 @@
         admin_users:
           - duck
           - misc
-          - eyal
-          - ederevea
           - doronf
           - didi
+          - dvolkov
         mail_aliases:
           # Person who should get root's mail
           root: "{{ ['root'] + ovirt_infra_emails }}"
